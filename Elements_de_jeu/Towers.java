@@ -13,9 +13,9 @@ public class Towers extends Entities implements Shooting {
     private int upgradeCost;
     private int upgradeTime;
     private int sellCost;
-    private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+    private ArrayList<Projectile> projectiles;
 
-    public Towers(int buildCost, int buildTime, int attackRange, int speedRotation, int attackSpeed,
+    public Towers(int x, int y, int buildCost, int buildTime, int attackRange, int speedRotation, int attackSpeed,
                   int attackDamage, int level, int upgradeCost, int upgradeTime, int sellCost){
         this.buildCost = buildCost;
         this.buildTime = buildTime;
@@ -28,11 +28,14 @@ public class Towers extends Entities implements Shooting {
         this.upgradeCost = upgradeCost;
         this.upgradeTime = upgradeTime;
         this.sellCost = sellCost;
+        projectiles = new ArrayList<Projectile>();
+        initTurret();
     }
+
 
     public void shoot(float x, float y){
     }
-
+}
 
     public int getattackDamage() {
         return attackDamage;
@@ -42,9 +45,9 @@ public class Towers extends Entities implements Shooting {
         return buildCost;
     }
 
-    public void upgrade(int score){
-        if (upgradeCost <= score){
-            if (MouseEvent == ){
+    public void upgrade(int score) {
+        if (upgradeCost <= score) {
+            if (MouseEvent ==) {
                 score -= upgradeCost;
                 upgradeCost += 20;
                 attackDamage += 20;
@@ -52,14 +55,19 @@ public class Towers extends Entities implements Shooting {
                 attackRange += 10;
                 attackSpeed += 5;
                 upgradeTime += 50;
-                sellCost +=20;
+                sellCost += 20;
                 level = level + 1;
-        else if{
-            return ("Tu n'as pas les fonds nécessaires, retourne shooter des méchants")
+            } else if {
+                return ("Tu n'as pas les fonds nécessaires, retourne shooter des méchants")
+            }
         }
     }
     public ArrayList<Projectile> getProjectiles() {
         return projectiles;
     }
 
+    public void initTurret() {
+        loadImage("src/turr.png");
+        getImageDimensions();
+    }
 }
