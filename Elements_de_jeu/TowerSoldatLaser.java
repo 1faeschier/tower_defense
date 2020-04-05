@@ -7,8 +7,4 @@ public class TowerSoldatLaser extends Towers {
         int attackDamage, int level, int upgradeCost, int upgradeTime, int sellCost);
     }
 
-    public void initTurret() {
-        loadImage("src/turr.png");
-        getImageDimensions();
-    }
 }
