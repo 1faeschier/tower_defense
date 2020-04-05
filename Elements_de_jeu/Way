@@ -1,0 +1,41 @@
+package sample;
+
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+
+import java.util.ArrayList;
+
+public class Way extends Map {
+    private ArrayList<Line> way = addway();
+
+    public ArrayList<Line> getWay(){
+        return way;
+    }
+
+    private ArrayList<Line> addway() {
+        ArrayList<Line> way = new ArrayList<>();
+        Line l1 = new Line(1000, 110, 110, 110);
+        l1.setStroke(Color.BROWN);
+        l1.setStrokeWidth(40);
+        Line l2 = new Line(110, 110, 110, 560);
+        l2.setStroke(Color.BROWN);
+        l2.setStrokeWidth(40);
+        Line l3 = new Line(110, 560, 1000, 560);
+        l3.setStroke(Color.BROWN);
+        l3.setStrokeWidth(40);
+        way.add(l1); way.add(l2); way.add(l3);
+    return way;
+    }
+
+
+    public Boolean isOnWay(Position p){
+        boolean res = false;
+        for (Line i : way){
+            double xa = i.getStartX(); double ya = i.getStartY(); double xb = i.getEndX(); double yb = i.getEndY(); double px = p.getX(); double py = p.getY();
+            if (py - ya == (yb-ya)/(xb-xa) * (px - xa) ){
+                res = true;
+            }
+        }
+        return res;
+    }
+}
