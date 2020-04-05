@@ -2,34 +2,34 @@ package Elements_de_jeu;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class Towers extends Entities implements Shooting {
+public class Towers extends Entities implements Runnable, Shooting {
+    private Position position = new Position(500, 130);
+    private int attackRange = 100;
+    private int attackDamage = 5;
+    private int attackSpeed = 100;
+    private Thread t;
     private int buildCost;
     private int buildTime;
-    private int attackRange;
     private int speedRotation;
-    private int attackSpeed;
-    private int attackDamage;
     private int level;
     private int upgradeCost;
     private int upgradeTime;
     private int sellCost;
-    private ArrayList<Projectile> projectiles;
+    private Ennemie ennemie;
 
-    public Towers(int x, int y, int buildCost, int buildTime, int attackRange, int speedRotation, int attackSpeed,
-                  int attackDamage, int level, int upgradeCost, int upgradeTime, int sellCost){
+    public void Towers(int buildCost, int buildTime, int attackRange, int speedRotation, int attackSpeed, int attackDamage, int level, int upgradeCost, int upgradeTime, int sellCost){
         this.buildCost = buildCost;
         this.buildTime = buildTime;
         this.attackRange = attackRange;
         this.attackSpeed = attackSpeed;
         this.speedRotation = speedRotation;
-        this.attackSpeed = attackSpeed;
         this.attackDamage = attackDamage;
         this.level = level;
         this.upgradeCost = upgradeCost;
         this.upgradeTime = upgradeTime;
         this.sellCost = sellCost;
-        projectiles = new ArrayList<Projectile>();
-        initTurret();
+        t = new Thread(this);
+        t.start();
     }
 
 
@@ -45,23 +45,24 @@ public class Towers extends Entities implements Shooting {
         return buildCost;
     }
 
-    public void upgrade(int score) {
-        if (upgradeCost <= score) {
-            if (MouseEvent ==) {
-                score -= upgradeCost;
-                upgradeCost += 20;
-                attackDamage += 20;
-                sellCost += 20;
-                attackRange += 10;
-                attackSpeed += 5;
-                upgradeTime += 50;
-                sellCost += 20;
-                level = level + 1;
-            } else if {
-                return ("Tu n'as pas les fonds nécessaires, retourne shooter des méchants")
-            }
+    public String upgrade(int score){
+        String res = "";
+        if (upgradeCost <= score){
+            score -= upgradeCost;
+            upgradeCost += 20;
+            attackDamage += 20;
+            sellCost += 20;
+            attackRange += 10;
+            attackSpeed += 5;
+            upgradeTime += 50;
+            res = "amérlioratioin réalisé avec succès !";
         }
+        else {
+            res =  "Tu n'as pas les fonds nécessaires, retourne shooter des méchants";
+        }
+        return res;
     }
+
     public ArrayList<Projectile> getProjectiles() {
         return projectiles;
     }
@@ -69,5 +70,16 @@ public class Towers extends Entities implements Shooting {
     public void initTurret() {
         loadImage("src/turr.png");
         getImageDimensions();
+    }
+        @Override
+    public void run() {
+            while (position.distance(position, ennemie.getPosition()) < attackRange){
+                ennemie.looseHealth(attackDamage);
+                try {
+                    Thread.sleep(attackSpeed);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
     }
 }
