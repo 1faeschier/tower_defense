@@ -1,0 +1,74 @@
+package sample;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class Map extends Application implements Iterable<Ennemie> {
+    private int x = 1000;
+    private int y = 100;
+    Position position = new Position(x,y);
+    EnJedi b = new EnJedi(position);
+    Tower t = new Tower();
+    ArrayList<Ennemie> enemies = new ArrayList<>();
+
+    public ArrayList getEnemies(){
+        return enemies;
+    }
+
+
+    public Map(){
+        super();
+        Timeline timer = new Timeline(new KeyFrame(Duration.millis(50), new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                for(Ennemie b: enemies){
+                    b.update();
+                }
+
+            }
+        }));
+        timer.setCycleCount(Timeline.INDEFINITE);
+        timer.play();
+
+    }
+
+    @Override
+    public void start(Stage stage) {
+        BorderPane mainPane = new BorderPane();
+        stage.setTitle("Tower Defence Game");
+        Way way = new Way();
+        for (Line line : way.getWay()){
+           mainPane.getChildren().add(line);
+        }
+        EnJedi enJedi = b.createnew();
+        enemies.add(enJedi);
+        Rectangle forme = enJedi.getforme();
+        mainPane.getChildren().add(forme);
+        mainPane.setPrefSize(x, 650);
+        stage.setScene(new Scene(mainPane, Color.GREEN));
+        stage.show();
+
+    }
+
+    public static void create(){
+        launch();
+    }
+
+    @Override
+    public Iterator<Ennemie> iterator() {
+        return enemies.iterator();
+    }
+}
