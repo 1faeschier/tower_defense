@@ -1,5 +1,3 @@
-package sample;
-
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
 
@@ -32,9 +30,9 @@ public class Position {
         this.y = y;
     }
 
-    public double distance(Position P1, Position P2){
-        double P1X = Math.pow(P1.getX(), 2.0); double P2X = Math.pow(P2.getX(), 2.0); double P1Y = Math.pow(P1.getY(), 2.0); double P2Y = Math.pow(P2.getY(), 2.0);
-        return Math.sqrt(Math.pow(P1X+P2X, 2.0)+Math.pow(P1Y+P2Y, 2.0));
+    public double distance(Position P2){
+        double P1X = x; double P2X = P2.getX(); double P1Y = y; double P2Y = P2.getY();
+        return Math.sqrt(Math.pow(P1X-P2X, 2.0)+Math.pow(P1Y-P2Y, 2.0));
     }
 //    public void getBounds(){
 //        return new Circle(x, y, double radius);
