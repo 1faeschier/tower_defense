@@ -19,11 +19,9 @@ public class Map extends Application implements Iterable<Ennemie> {
     Position position = new Position(x,y);
     EnJedi b = new EnJedi(position);
     Tower t = new Tower();
-    ArrayList<Ennemie> enemies = new ArrayList<>();
+    ArrayList<Ennemie>listenemie = new ArrayList<>();
+    ArrayList<Tower>listdefence = new ArrayList<>();
 
-    public ArrayList getEnemies(){
-        return enemies;
-    }
 
 
     public Map(){
@@ -32,7 +30,7 @@ public class Map extends Application implements Iterable<Ennemie> {
 
             @Override
             public void handle(ActionEvent event) {
-                for(Ennemie b: enemies){
+                for(Ennemie b: listenemie){
                     b.update();
                 }
 
@@ -45,16 +43,22 @@ public class Map extends Application implements Iterable<Ennemie> {
 
     @Override
     public void start(Stage stage) {
+
         BorderPane mainPane = new BorderPane();
         stage.setTitle("Tower Defence Game");
         Way way = new Way();
         for (Line line : way.getWay()){
-           mainPane.getChildren().add(line);
+            mainPane.getChildren().add(line);
         }
-        EnJedi enJedi = b.createnew();
-        enemies.add(enJedi);
-        Rectangle forme = enJedi.getforme();
-        mainPane.getChildren().add(forme);
+        EnJedi enJedi = new EnJedi(position);
+        listenemie.add(enJedi);
+        enJedi.start(listenemie);
+        Rectangle formejedi = enJedi.getforme();
+        Tower tower = new Tower();
+        Rectangle formeTower = tower.getForme();
+        listdefence.add(tower);
+        tower.start(listenemie);
+        mainPane.getChildren().add(formejedi); mainPane.getChildren().add(formeTower);
         mainPane.setPrefSize(x, 650);
         stage.setScene(new Scene(mainPane, Color.GREEN));
         stage.show();
@@ -67,6 +71,6 @@ public class Map extends Application implements Iterable<Ennemie> {
 
     @Override
     public Iterator<Ennemie> iterator() {
-        return enemies.iterator();
+        return listenemie.iterator();
     }
 }
