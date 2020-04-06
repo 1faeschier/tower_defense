@@ -2,20 +2,21 @@ package Elements_de_jeu;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import java.util.ArrayList;
 
 public class EnJedi extends Ennemie implements Runnable {
     private int id; //=matricule
     private int power; //résistance aux tirs
     private String description; //pour le différencier à l'écran
-    private int health = 100; //vie
+    private int health = 10; //vie
     private int speed = 15;//vitesse du perso = temps en miliseconde entre deux déplacement de 1 unité
     private Thread t;
-
+    private ArrayList<Ennemie> listenemie;
 
     public EnJedi(Position positioninit) {
+        super();
         position = positioninit;
         t = new Thread(this);
-        t.start();
     }
     public int getHealth() {
         return health;
@@ -42,7 +43,8 @@ public class EnJedi extends Ennemie implements Runnable {
         r.setWidth(20);
         r.setX(position.getX());
         r.setY(position.getY());
-        r.setStroke(Color.BLUE);
+        r.setFill(Color.BLUE);
+        r.setStroke(Color.BLACK);
         return r;
     }
 
@@ -55,6 +57,7 @@ public class EnJedi extends Ennemie implements Runnable {
         r.setX(position.getX());
         r.setY(position.getY());
     }
+
 
     @Override
     public void run() {
@@ -82,8 +85,13 @@ public class EnJedi extends Ennemie implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
 
     }
 
+    public void start(ArrayList<Ennemie> list) {
+        listenemie = list;
+        t.start();
+    }
 }
