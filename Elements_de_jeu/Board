@@ -1,0 +1,22 @@
+package Elements_de_jeu;
+
+import javafx.scene.layout.Pane;
+
+import java.awt.*;
+
+public class Board extends Pane { //classe ou je vais poser mes tourelles
+    private Towers tourelles;
+    private void drawObjects(Graphics g) {
+        g.drawImage(Towers.getImage(), Towers.getX(), Towers.getY(),
+                    this);
+        }
+
+    public void newTurret(Position p){
+        tourelles = new Towers();
+        tourelles.addPosition(p);
+    }
+
+    // fonction qui affiche l'image de la tour
+    //public void isVisible
+
+}
