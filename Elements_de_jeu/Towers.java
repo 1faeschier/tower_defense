@@ -2,7 +2,7 @@ package Elements_de_jeu;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class Towers extends Entities implements Runnable, Shooting {
+public class Tower extends Entities implements Runnable, Shooting {
     private Position position = new Position(500, 130);
     private int attackRange = 100;
     private int attackDamage = 5;
@@ -17,7 +17,7 @@ public class Towers extends Entities implements Runnable, Shooting {
     private int sellCost;
     private Ennemie ennemie;
 
-    public void Towers(int buildCost, int buildTime, int attackRange, int speedRotation, int attackSpeed, int attackDamage, int level, int upgradeCost, int upgradeTime, int sellCost){
+    public void Tower(int buildCost, int buildTime, int attackRange, int speedRotation, int attackSpeed, int attackDamage, int level, int upgradeCost, int upgradeTime, int sellCost){
         this.buildCost = buildCost;
         this.buildTime = buildTime;
         this.attackRange = attackRange;
@@ -72,7 +72,7 @@ import javafx.scene.image.Image;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class Towers extends Entities implements Shooting {
+public class Tower extends Entities implements Shooting {
     private int buildCost;
     private int buildTime;
     private int attackRange;
@@ -85,7 +85,7 @@ public class Towers extends Entities implements Shooting {
     private int sellCost;
 
 
-    public Towers(int buildCost, int buildTime, int attackRange, int speedRotation, int attackSpeed,
+    public Tower(int buildCost, int buildTime, int attackRange, int speedRotation, int attackSpeed,
                   int attackDamage, int level, int upgradeCost, int upgradeTime, int sellCost, int id,
                   String description, int height, int width, Image image){
         super(id, description, image, height, width);
@@ -158,15 +158,35 @@ public class Towers extends Entities implements Shooting {
         loadImage("src/turr.png");
         getImageDimensions();
     }
-        @Override
+
+    public Rectangle getForme(){
+        Rectangle rectangle = new Rectangle();
+        rectangle.setHeight(50); rectangle.setWidth(50); rectangle.setFill(Color.WHITE); rectangle.setStroke(Color.BLACK);
+        rectangle.setX(500); rectangle.setY(130);
+        return rectangle;
+    }
+    @Override
     public void run() {
-            while (position.distance(position, ennemie.getPosition()) < attackRange){
-                ennemie.looseHealth(attackDamage);
+        while(true) {
+            if (position.distance(listenemie.get(0).getPosition()) < attackRange){
+                try {
+                    listenemie.get(0).looseHealth(attackDamage);
+                    Thread.sleep(attackSpeed);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
                 try {
                     Thread.sleep(attackSpeed);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+    public void start(ArrayList<Ennemie> list) {
+        listenemie = list;
+        t.start();
     }
 }
