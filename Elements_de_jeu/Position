@@ -4,13 +4,10 @@ import javafx.scene.transform.Rotate;
 public class Position {
     private double x;
     private double y;
-    private double radius;
-    private double angle;
 
     public Position(double x, double y){
         this.x = x;
         this.y = y;
-        //this.angle = angle;
 
     }
 
@@ -34,12 +31,4 @@ public class Position {
         double P1X = x; double P2X = P2.getX(); double P1Y = y; double P2Y = P2.getY();
         return Math.sqrt(Math.pow(P1X-P2X, 2.0)+Math.pow(P1Y-P2Y, 2.0));
     }
-//    public void getBounds(){
-//        return new Circle(x, y, double radius);
-//    }
-    //public Rotate rotate(double angle){
-    //    rotate().setAngle(double angle);
-    //    rotate().setPivotX(double x);
-    //    rotate().setPivotY(double y);
-    //}
 }
