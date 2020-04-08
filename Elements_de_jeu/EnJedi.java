@@ -5,9 +5,6 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 public class EnJedi extends Ennemie implements Runnable {
-    private int id; //=matricule
-    private int power; //résistance aux tirs
-    private String description; //pour le différencier à l'écran
     private int health = 10; //vie
     private int speed = 15;//vitesse du perso = temps en miliseconde entre deux déplacement de 1 unité
     private Thread t;
@@ -20,9 +17,6 @@ public class EnJedi extends Ennemie implements Runnable {
     }
     public int getHealth() {
         return health;
-    }
-    public int getPower(){
-        return power;
     }
 
     public String getDescription(){
