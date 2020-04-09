@@ -1,0 +1,39 @@
+package Elements_de_jeu;
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Wave implements Runnable{
+    private ArrayList<Ennemie> wave = new ArrayList<>();
+    private Thread t;
+    Position positioninit = new Position(1000,100);
+    private int niveau;
+
+    public Wave(){
+        t = new Thread(this);
+    }
+
+    public ArrayList<Ennemie> getWave(){return wave;}
+
+    @Override
+    public void run() {
+        int i = 0;
+        while (i < 3){
+            try {
+                wave.add(new EnJedi(positioninit));
+                i++;
+                System.out.println("ok");
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public ArrayList start(int niveau){
+        this.niveau = niveau;
+        for (int i = 1; i <= niveau; i++) {
+            wave.add(new EnJedi(positioninit.changeposx(positioninit.getX()+i*((int)(Math.random()*60)))));
+        }
+        return wave;
+    }
+}
