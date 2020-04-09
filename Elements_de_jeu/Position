@@ -31,4 +31,24 @@ public class Position {
         double P1X = x; double P2X = P2.getX(); double P1Y = y; double P2Y = P2.getY();
         return Math.sqrt(Math.pow(P1X-P2X, 2.0)+Math.pow(P1Y-P2Y, 2.0));
     }
+    
+    public boolean isonWay(Way way){
+        Boolean res = false;
+        ArrayList<Line> waylist = way.getWay();
+        for( Line l : waylist){
+            if(l.getStartX()==l.getEndX()){
+                if(x == l.getEndX()-10){
+                    res = true;
+                }
+            }
+            else {
+                double m = (l.getStartY()-l.getEndY())/(l.getStartX()-l.getEndX());
+                double p = l.getStartY()-m*l.getStartX();
+                if(y+10 == m*(x) + p){
+                    res = true;
+                }
+            }
+        }
+        return res;
+    }    
 }
