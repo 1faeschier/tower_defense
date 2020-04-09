@@ -1,10 +1,14 @@
+package sample;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -17,11 +21,11 @@ public class Map extends Application implements Iterable<Ennemie> {
     private int x = 1000;
     private int y = 100;
     Position position = new Position(x,y);
-    EnJedi b = new EnJedi(position);
-    Tower t = new Tower();
     ArrayList<Ennemie>listenemie = new ArrayList<>();
     ArrayList<Tower>listdefence = new ArrayList<>();
-
+    Wave wave1 = new Wave();
+    private BorderPane mainPane;
+    int score = 10;
 
 
     public Map(){
@@ -32,6 +36,7 @@ public class Map extends Application implements Iterable<Ennemie> {
             public void handle(ActionEvent event) {
                 for(Ennemie b: listenemie){
                     b.update();
+                    listenemie = wave1.getWave();
                 }
 
             }
@@ -44,23 +49,25 @@ public class Map extends Application implements Iterable<Ennemie> {
     @Override
     public void start(Stage stage) {
 
-        BorderPane mainPane = new BorderPane();
+        mainPane = new BorderPane();
+        stage.setScene(new Scene(mainPane, Color.GREEN));
         stage.setTitle("Tower Defence Game");
         Way way = new Way();
         for (Line line : way.getWay()){
             mainPane.getChildren().add(line);
         }
-        EnJedi enJedi = new EnJedi(position);
-        listenemie.add(enJedi);
-        enJedi.start(listenemie);
-        Rectangle formejedi = enJedi.getforme();
-        Tower tower = new Tower();
-        Rectangle formeTower = tower.getForme();
-        listdefence.add(tower);
-        tower.start(listenemie);
-        mainPane.getChildren().add(formejedi); mainPane.getChildren().add(formeTower);
+        listenemie = wave1.start(4);
+        for (Ennemie e : listenemie){
+            System.out.println(position.isonWay(way));
+            System.out.println(position.getY());
+            mainPane.getChildren().add(e.getForme());
+            e.start(listenemie, way);
+        }
+        Tower tower = new Tower(new Position(500, 130)); Tower tower1 = new Tower(new Position(130, 300));
+        listdefence.add(tower); listdefence.add(tower1);
+        tower.start(listenemie); tower1.start(listenemie);
+        mainPane.getChildren().add(tower.getForme()); mainPane.getChildren().add(tower1.getForme());
         mainPane.setPrefSize(x, 650);
-        stage.setScene(new Scene(mainPane, Color.GREEN));
         stage.show();
 
     }
