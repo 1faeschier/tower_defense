@@ -14,9 +14,19 @@ public class Ennemie {
     public int health = 200;
     public Rectangle r = new Rectangle();
 
-
+    public int getHealth(){return health;};
+    
     public void update(){}
-
+    
+    public Rectangle getForme() {
+        r.setHeight(20);
+        r.setWidth(20);
+        r.setX(position.getX());
+        r.setY(position.getY());
+        r.setFill(Color.BLUE);
+        r.setStroke(Color.BLACK);
+        return r;
+    }    
 
     Position getPosition(){
         return position;
@@ -31,5 +41,9 @@ public class Ennemie {
         }
         System.out.println(health);
     }
+    
+    public void start(ArrayList<Ennemie> listenemie, Way way) {
+    }    
+    
 }
 
