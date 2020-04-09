@@ -3,12 +3,16 @@ package Elements_de_jeu;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
+import javafx.scene.shape.Line;
+
 
 public class EnJedi extends Ennemie implements Runnable {
     private int health = 10; //vie
     private int speed = 15;//vitesse du perso = temps en miliseconde entre deux déplacement de 1 unité
     private Thread t;
     private ArrayList<Ennemie> listenemie;
+    private Way way;
+
 
     public EnJedi(Position positioninit) {
         super();
@@ -55,7 +59,8 @@ public class EnJedi extends Ennemie implements Runnable {
 
     @Override
     public void run() {
-        while ((getPosition().getX()>100) && (getPosition().getY() == 100) && health > 0) {
+        ArrayList<Line> waylist = way.getWay();
+        while (position.isonWay(way) && position.getX()>waylist.get(0).getEndX()-10) {
             move(-1, 0);
             try {
                 Thread.sleep(speed);
@@ -63,7 +68,7 @@ public class EnJedi extends Ennemie implements Runnable {
                 e.printStackTrace();
             }
         }
-        while (getPosition().getY()<550 && health > 0) {
+        while (position.isonWay(way) && position.getY()<waylist.get(1).getEndY()-10) {
             move(0, 1);
             try {
                 Thread.sleep(speed);
@@ -72,7 +77,7 @@ public class EnJedi extends Ennemie implements Runnable {
             }
 
         }
-        while ((getPosition().getX()<1000) && (getPosition().getY() == 550 && health > 0)) {
+        while ((position.isonWay(way) && position.getX()<waylist.get(2).getEndX())) {
             move(1, 0);
             try {
                 Thread.sleep(speed);
@@ -84,8 +89,9 @@ public class EnJedi extends Ennemie implements Runnable {
 
     }
 
-    public void start(ArrayList<Ennemie> list) {
+    public void start(ArrayList<Ennemie> list, Way way) {
         listenemie = list;
+        this.way = way;
         t.start();
     }
 }
