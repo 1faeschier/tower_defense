@@ -24,16 +24,4 @@ public class Way extends Map {
         way.add(l1); way.add(l2); way.add(l3);
     return way;
     }
-
-
-    public Boolean isOnWay(Position p){
-        boolean res = false;
-        for (Line i : way){
-            double xa = i.getStartX(); double ya = i.getStartY(); double xb = i.getEndX(); double yb = i.getEndY(); double px = p.getX(); double py = p.getY();
-            if (py - ya == (yb-ya)/(xb-xa) * (px - xa) ){
-                res = true;
-            }
-        }
-        return res;
-    }
 }
