@@ -152,6 +152,9 @@ public class Map extends Application implements Iterable<Ennemie> {
 
         gc.setFill(Color.WHITE);
         gc.fillText("Pause", 430, 30);
+        
+        gc.setFill(Color.WHITE);
+        gc.fillText("Tour", 15, 650 );
 
 
     }
