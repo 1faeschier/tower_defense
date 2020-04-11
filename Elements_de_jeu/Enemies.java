@@ -9,7 +9,6 @@ public class Ennemie {
     private int power; //résistance aux tirs
     private String description; //pour le différencier à l'écran
     private int speed;//vitesse du perso
-    private static ArrayList<Coordinate> path;
     public Position position;
     public int health = 200;
     public Rectangle r = new Rectangle();
