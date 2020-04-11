@@ -32,7 +32,7 @@ public class Map extends Application implements Iterable<Ennemie> {
     static int count = 0;
     static int speed = 5;
     static boolean gameOver = false;
-    static int height = 30;
+    static int height = 35;
     static int width = 60;
     static int cornersize = 20;
     static Position position;
