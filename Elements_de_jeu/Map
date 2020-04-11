@@ -1,17 +1,22 @@
 package sample;
 
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.TilePane;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.ArrayList;
@@ -20,25 +25,27 @@ import java.util.Iterator;
 public class Map extends Application implements Iterable<Ennemie> {
     private int x = 1000;
     private int y = 100;
-    Position position = new Position(x,y);
     ArrayList<Ennemie>listenemie = new ArrayList<>();
     ArrayList<Tower>listdefence = new ArrayList<>();
     Wave wave1 = new Wave();
-    private BorderPane mainPane;
-    int score = 10;
-
+    static int score = 10;
+    static int count = 0;
+    static int speed = 5;
+    static boolean gameOver = false;
+    static int height = 30;
+    static int width = 30;
+    static int cornersize = 20;
+    static Position position;
 
     public Map(){
         super();
         Timeline timer = new Timeline(new KeyFrame(Duration.millis(50), new EventHandler<ActionEvent>() {
-
             @Override
             public void handle(ActionEvent event) {
                 for(Ennemie b: listenemie){
                     b.update();
                     listenemie = wave1.getWave();
                 }
-
             }
         }));
         timer.setCycleCount(Timeline.INDEFINITE);
@@ -48,30 +55,106 @@ public class Map extends Application implements Iterable<Ennemie> {
 
     @Override
     public void start(Stage stage) {
+        try {
+            Canvas c = makeCanvas();
+            GraphicsContext gc = c.getGraphicsContext2D();
+            StackPane canvasHolder = new StackPane(c);
+            canvasHolder.setStyle("-fx-border-width: 2px; -fx-border-color: #444");
+            BorderPane root = new BorderPane(canvasHolder);
+            root.setStyle("-fx-border-width: 1px; -fx-border-color: black");
 
-        mainPane = new BorderPane();
-        stage.setScene(new Scene(mainPane, Color.GREEN));
-        stage.setTitle("Tower Defence Game");
-        Way way = new Way();
-        for (Line line : way.getWay()){
-            mainPane.getChildren().add(line);
+
+            new AnimationTimer() {
+                long lastTick = 0;
+
+                public void handle(long now) {
+                    if (lastTick == 0) {
+                        lastTick = now;
+                        tick(gc);
+                        return;
+                    }
+                    if (now - lastTick > 1000000000 / speed) {
+                        lastTick = now;
+                        tick(gc);
+                    }
+                }
+            }.start();
+
+
+            Scene scene = new Scene(root, width * cornersize, height * cornersize);
+            stage.setScene(scene);
+            stage.setTitle("Tower Defence Game");
+            stage.show();
+            Way way = new Way();
+            for (Line line : way.getWay()){
+                root.getChildren().add(line);
+            }
+            listenemie = wave1.start(4);
+            for (Ennemie e : listenemie){
+                root.getChildren().add(e.getForme());
+                e.start(listenemie, way);
+            }
+            Tower tower = new Tower(new Position(500, 130));
+            Tower tower1 = new Tower(new Position(130, 300));
+            listdefence.add(tower);
+            listdefence.add(tower1);
+            tower.start(listenemie);
+            tower1.start(listenemie);
+            root.getChildren().add(tower.getForme());
+            root.getChildren().add(tower1.getForme());
+            root.setPrefSize(x, 650);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        listenemie = wave1.start(4);
-        for (Ennemie e : listenemie){
-            System.out.println(position.isonWay(way));
-            System.out.println(position.getY());
-            mainPane.getChildren().add(e.getForme());
-            e.start(listenemie, way);
-        }
-        Tower tower = new Tower(new Position(500, 130)); Tower tower1 = new Tower(new Position(130, 300));
-        listdefence.add(tower); listdefence.add(tower1);
-        tower.start(listenemie); tower1.start(listenemie);
-        mainPane.getChildren().add(tower.getForme()); mainPane.getChildren().add(tower1.getForme());
-        mainPane.setPrefSize(x, 650);
-        stage.show();
+    }
+
+    public Canvas makeCanvas(){
+        Canvas c = new Canvas(width * cornersize, height * cornersize);
+        c.setOnMouseClicked( this::mouseClicked );
+        return c;
+    }
+
+    private void mouseClicked(MouseEvent mouseEvent) {
+        int x = (int)mouseEvent.getX();
+        int y = (int)mouseEvent.getY();
 
     }
 
+    private HBox makeToolPanel(Canvas c){
+        Button pauseButton = new Button("pause");
+        Button tourButton = new Button("tour");
+        tourButton.setOnAction( (e) -> new Tower(position) );
+        HBox tools = new HBox(10);
+        tools.getChildren().add(pauseButton);
+        tools.getChildren().add(tourButton);
+        tools.setStyle("-fx-border-width: 5px;" +
+                " -fx-border-color: transparent; -fx-background-color: lightgray");
+
+        return tools;
+
+    }
+
+    public static void tick(GraphicsContext gc){
+        if (gameOver) {
+            gc.setFill(Color.RED);
+            gc.setFont(new Font("",50));
+            gc.fillText("GAME OVER", 100,250);
+        }
+
+        gc.setFill(Color.GREEN);
+        gc.fillRect(0,0,2000, 2000);
+
+        gc.setFill(Color.WHITE);
+        gc.setFont(new Font("",30));
+        gc.fillText("Score:" + Player.score(score),10,30);
+
+        gc.setFill(Color.WHITE);
+        gc.fillText("Pause", 430, 30);
+
+
+    }
     public static void create(){
         launch();
     }
