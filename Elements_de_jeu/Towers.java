@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Tower implements Runnable {
     private Position position;
     private int attackRange = 200;
-    private int attackDamage = 3;
+    private int attackDamage = 15;
     private int attackSpeed = 100;
     private Thread t;
     private int buildCost;
