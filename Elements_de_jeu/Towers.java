@@ -4,6 +4,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Line;
+import java.util.ArrayList;
+
 
 
 public class Tower extends Entities implements Runnable {
