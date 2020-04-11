@@ -18,23 +18,8 @@ public class Entities {
         this.width = width;
         this.image = image;
     }
-
-    public void getImageDimensions() {
-
-        width = image.getWidth(null);
-        height = image.getHeight(null);
-    }
-
-    public void loadImage(String imageName) {
-
-        ImageIcon ii = new ImageIcon(imageName);
-        image = ii.getImage();
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
+    
+    
 
 }
 
