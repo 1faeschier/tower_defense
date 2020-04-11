@@ -57,10 +57,6 @@ public class Tower extends Entities implements Runnable {
         return rectangle;
     }
 
-
-    public void shoot(float x, float y){
-    }
-
     @Override
     public void run() {
         for (Ennemie ennemie : listenemie) {
