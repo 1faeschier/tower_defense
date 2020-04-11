@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 
 
-public class Tower extends Entities implements Runnable {
+public class Tower implements Runnable {
     private Position position;
     private int attackRange = 200;
     private int attackDamage = 3;
