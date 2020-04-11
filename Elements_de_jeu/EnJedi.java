@@ -23,10 +23,6 @@ public class EnJedi extends Ennemie implements Runnable {
         return health;
     }
 
-    public String getDescription(){
-        return description;
-    }
-
     public Position getPosition() {
         return position;
     }
