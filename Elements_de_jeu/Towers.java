@@ -60,10 +60,18 @@ public class Tower implements Runnable {
     @Override
     public void run() {
         for (Ennemie ennemie : listenemie) {
-            while (ennemie.getHealth() > 0) {
+            while (position.distance(ennemie.getPosition()) > attackRange){
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            while (ennemie.getHealth() > 0 && position.distance(ennemie.getPosition()) < attackRange) {
                 if (position.distance(ennemie.getPosition()) < attackRange) {
                     try {
                         ennemie.looseHealth(attackDamage);
+                        System.out.println(ennemie.getHealth());
                         Thread.sleep(attackSpeed);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -78,6 +86,7 @@ public class Tower implements Runnable {
             }
         }
     }
+
     public void start(ArrayList<Ennemie> list) {
         listenemie = list;
         t.start();
