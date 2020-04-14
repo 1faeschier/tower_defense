@@ -45,8 +45,11 @@ public class Map extends Application implements Iterable<Ennemie> {
             public void handle(ActionEvent event) {
                 for(Ennemie b: listenemie){
                     b.update();
-                    listenemie = wave1.getWave();
                 }
+                for(Tower t : listdefence){
+                    t.update();
+                }
+                
             }
         }));
         timer.setCycleCount(Timeline.INDEFINITE);
