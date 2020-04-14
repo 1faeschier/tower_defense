@@ -36,6 +36,7 @@ public class Map extends Application implements Iterable<Ennemie> {
     static int width = 60;
     static int cornersize = 20;
     static Position position;
+    private int map = 2;
 
     public Map(){
         super();
@@ -86,13 +87,13 @@ public class Map extends Application implements Iterable<Ennemie> {
             stage.setTitle("Tower Defence Game");
             stage.show();
             Way way = new Way();
-            for (Line line : way.getWay()){
+            for (Line line : way.getWay(map)){
                 root.getChildren().add(line);
             }
             listenemie = wave1.start(4);
             for (Ennemie e : listenemie){
                 root.getChildren().add(e.getForme());
-                e.start(listenemie, way);
+                e.start(listenemie, way, map);
             }
             Tower tower = new Tower(new Position(500, 130));
             Tower tower1 = new Tower(new Position(130, 300));
