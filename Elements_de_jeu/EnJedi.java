@@ -1,17 +1,31 @@
-package Elements_de_jeu;
+package sample;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javafx.scene.shape.Line;
 
 
 public class EnJedi extends Ennemie implements Runnable {
-    private int health = 10; //vie
+    private int health = 200; //vie
     private int speed = 15;//vitesse du perso = temps en miliseconde entre deux déplacement de 1 unité
     private Thread t;
     private ArrayList<Ennemie> listenemie;
     private Way way;
+    private int map;
+    private Random random = new Random();
+
+
+    public void looseHealth(int amount) {
+        health -= amount;
+        if (health <= 0){
+            r.setWidth(0);
+            r.setHeight(0);
+            r.setStroke(Color.BROWN);
+        }
+    }
 
 
     public EnJedi(Position positioninit) {
@@ -55,39 +69,97 @@ public class EnJedi extends Ennemie implements Runnable {
 
     @Override
     public void run() {
-        ArrayList<Line> waylist = way.getWay();
-        while (position.isonWay(way) && position.getX()>waylist.get(0).getEndX()-10) {
-            move(-1, 0);
-            try {
-                Thread.sleep(speed);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        ArrayList<Line> waylist = way.getWay(map);
+        if (map == 1) {
+            while (position.isonWay(way, map) && position.getX() > waylist.get(0).getEndX() - 10) {
+                move(-1, 0);
+                try {
+                    Thread.sleep(speed);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            while (position.isonWay(way, map) && position.getY() < waylist.get(1).getEndY() - 10) {
+                move(0, 1);
+                try {
+                    Thread.sleep(speed);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            while ((position.isonWay(way, map) && position.getX() < waylist.get(2).getEndX())) {
+                move(1, 0);
+                try {
+                    Thread.sleep(speed);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        while (position.isonWay(way) && position.getY()<waylist.get(1).getEndY()-10) {
-            move(0, 1);
-            try {
-                Thread.sleep(speed);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-        }
-        while ((position.isonWay(way) && position.getX()<waylist.get(2).getEndX())) {
-            move(1, 0);
-            try {
-                Thread.sleep(speed);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if (map == 2){
+            if (random.nextBoolean()){
+                while (position.isonWay(way, map) && position.getX() > 690) {
+                    move(-1, 0);
+                    try {
+                        Thread.sleep(speed);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                while (position.isonWay(way, map) && position.getY() < 300) {
+                    move(0, 1);
+                    try {
+                        Thread.sleep(speed);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                while (position.isonWay(way, map) && position.getX() > 290) {
+                    move(-1, 0);
+                    try {
+                        Thread.sleep(speed);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                while (position.isonWay(way, map) && position.getY() > 100) {
+                    move(0, -1);
+                    try {
+                        Thread.sleep(speed);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                while (position.isonWay(way, map) && position.getX() > 0) {
+                    move(-1, 0);
+                    try {
+                        Thread.sleep(speed);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+            else{
+                while (position.isonWay(way, map) && position.getX() > 0) {
+                    move(-1, 0);
+                    try {
+                        Thread.sleep(speed);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
+            }
         }
 
     }
 
-    public void start(ArrayList<Ennemie> list, Way way) {
+    public void start(ArrayList<Ennemie> list, Way way, int map) {
         listenemie = list;
         this.way = way;
         t.start();
+        this.map = map;
     }
 }
