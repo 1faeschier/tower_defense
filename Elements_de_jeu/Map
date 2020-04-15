@@ -25,7 +25,7 @@ import java.util.Iterator;
 public class Map extends Application implements Iterable<Ennemie> {
     private int x = 1000;
     private int y = 100;
-    ArrayList<Ennemie>listenemie = new ArrayList<>();
+    static ArrayList<Ennemie>listenemie = new ArrayList<>();
     ArrayList<Tower>listdefence = new ArrayList<>();
     Wave wave1 = new Wave();
     static int score = 10;
@@ -49,7 +49,7 @@ public class Map extends Application implements Iterable<Ennemie> {
                 for(Tower t : listdefence){
                     t.update();
                 }
-                
+
             }
         }));
         timer.setCycleCount(Timeline.INDEFINITE);
@@ -63,9 +63,7 @@ public class Map extends Application implements Iterable<Ennemie> {
             Canvas c = makeCanvas();
             GraphicsContext gc = c.getGraphicsContext2D();
             StackPane canvasHolder = new StackPane(c);
-            canvasHolder.setStyle("-fx-border-width: 2px; -fx-border-color: #444");
             BorderPane root = new BorderPane(canvasHolder);
-            root.setStyle("-fx-border-width: 1px; -fx-border-color: black");
 
 
             new AnimationTimer() {
@@ -93,13 +91,13 @@ public class Map extends Application implements Iterable<Ennemie> {
             for (Line line : way.getWay(map)){
                 root.getChildren().add(line);
             }
-            listenemie = wave1.start(4);
+            listenemie = wave1.start(2);
             for (Ennemie e : listenemie){
                 root.getChildren().add(e.getForme());
                 e.start(listenemie, way, map);
             }
             Tower tower = new Tower(new Position(500, 130));
-            Tower tower1 = new Tower(new Position(130, 300));
+            Tower tower1 = new Tower(new Position(250, 150));
             listdefence.add(tower);
             listdefence.add(tower1);
             tower.start(listenemie);
@@ -133,8 +131,6 @@ public class Map extends Application implements Iterable<Ennemie> {
         HBox tools = new HBox(10);
         tools.getChildren().add(pauseButton);
         tools.getChildren().add(tourButton);
-        tools.setStyle("-fx-border-width: 5px;" +
-                " -fx-border-color: transparent; -fx-background-color: lightgray");
 
         return tools;
 
@@ -152,13 +148,16 @@ public class Map extends Application implements Iterable<Ennemie> {
 
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("",30));
-        gc.fillText("Score:" + Player.score(score),10,30);
+        gc.fillText("Score:" + score,20,40);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Pause", 430, 30);
-        
+        gc.fillText("Pause", 500, 40);
+
         gc.setFill(Color.WHITE);
-        gc.fillText("Tour", 15, 650 );
+        gc.fillText("Tour", 15, 500 );
+
+        gc.setFill(Color.WHITE);
+        gc.fillText("Wave: 1", 950, 40);
 
 
     }
