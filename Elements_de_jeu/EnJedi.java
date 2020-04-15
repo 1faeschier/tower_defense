@@ -24,6 +24,7 @@ public class EnJedi extends Ennemie implements Runnable {
             r.setWidth(0);
             r.setHeight(0);
             r.setStroke(Color.BROWN);
+            Map.score += 10;
         }
     }
 
@@ -98,8 +99,8 @@ public class EnJedi extends Ennemie implements Runnable {
             }
         }
 
-        if (map == 2){
-            if (random.nextBoolean()){
+        if (map == 2) {
+            if (random.nextBoolean()) {
                 while (position.isonWay(way, map) && position.getX() > 690) {
                     move(-1, 0);
                     try {
@@ -140,8 +141,13 @@ public class EnJedi extends Ennemie implements Runnable {
                         e.printStackTrace();
                     }
                 }
-            }
-            else{
+                if (position.isonWay(way, map) && position.getX() < 20) {
+                    r.setWidth(0);
+                    r.setHeight(0);
+                    r.setStroke(Color.BROWN);
+                    Map.score -= 10;
+                }
+            } else {
                 while (position.isonWay(way, map) && position.getX() > 0) {
                     move(-1, 0);
                     try {
@@ -150,7 +156,18 @@ public class EnJedi extends Ennemie implements Runnable {
                         e.printStackTrace();
                     }
                 }
-
+                if (health != 0) {
+                    if (position.isonWay(way, map) && position.getX() < 20) {
+                        r.setWidth(0);
+                        r.setHeight(0);
+                        r.setStroke(Color.BROWN);
+                        Map.score -= 10;
+                    }
+                } else {
+                    if (position.isonWay(way, map) && position.getX() < 20) {
+                        Map.score += 0;
+                    }
+                }
             }
         }
 
