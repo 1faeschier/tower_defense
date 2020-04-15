@@ -37,6 +37,8 @@ public class Map extends Application implements Iterable<Ennemie> {
     static int cornersize = 20;
     static Position position;
     private int map = 2;
+    private Way way;
+    private BorderPane root;
 
     public Map(){
         super();
@@ -87,14 +89,13 @@ public class Map extends Application implements Iterable<Ennemie> {
             stage.setScene(scene);
             stage.setTitle("Tower Defence Game");
             stage.show();
-            Way way = new Way();
+            way = new Way();
             for (Line line : way.getWay(map)){
                 root.getChildren().add(line);
             }
             listenemie = wave1.start(2);
             for (Ennemie e : listenemie){
                 root.getChildren().add(e.getForme());
-                e.start(listenemie, way, map);
             }
             Tower tower = new Tower(new Position(500, 130));
             Tower tower1 = new Tower(new Position(250, 150));
@@ -119,9 +120,21 @@ public class Map extends Application implements Iterable<Ennemie> {
     }
 
     private void mouseClicked(MouseEvent mouseEvent) {
-        int x = (int)mouseEvent.getX();
-        int y = (int)mouseEvent.getY();
-
+        int x = (int) mouseEvent.getX();
+        int y = (int) mouseEvent.getY();
+        if (x < 510 && x > 420 && y < 30) {
+            start();
+        }
+        if (x < 610 && x > 550 && y < 30) {
+            listdefence.add(new Tower(mouseClickedtower(mouseEvent)));
+            root.getChildren().add(listdefence.get(listdefence.size()-1).getForme());
+        }
+    }
+    
+    private Position mouseClickedtower(MouseEvent mouseEvent){
+        int x = (int) mouseEvent.getX();
+        int y = (int) mouseEvent.getY();
+        return new Position(x,y);
     }
 
     private HBox makeToolPanel(Canvas c){
@@ -148,21 +161,27 @@ public class Map extends Application implements Iterable<Ennemie> {
 
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("",30));
-        gc.fillText("Score:" + score,20,40);
+        gc.fillText("Score:" + Player.score(score),10,30);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Pause", 500, 40);
+        gc.fillText("start", 430, 30);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Tour", 15, 500 );
-
-        gc.setFill(Color.WHITE);
-        gc.fillText("Wave: 1", 950, 40);
+        gc.fillText("Tour", 550, 30 );
 
 
     }
     public static void create(){
         launch();
+    }
+    
+    public void start(){
+        for (Tower t : listdefence) {
+            t.start(listenemie);
+        }
+        for (Ennemie e : listenemie){
+            e.start(listenemie, way, map);
+        }
     }
 
     @Override
