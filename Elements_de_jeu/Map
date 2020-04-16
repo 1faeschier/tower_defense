@@ -25,24 +25,26 @@ import java.util.Iterator;
 public class Map extends Application implements Iterable<Ennemie> {
     private int x = 1000;
     private int y = 100;
-    static ArrayList<Ennemie>listenemie = new ArrayList<>();
+    ArrayList<Ennemie>listenemie = new ArrayList<>();
     ArrayList<Tower>listdefence = new ArrayList<>();
     Wave wave1 = new Wave();
     static int score = 10;
     static int count = 0;
     static int speed = 5;
     static boolean gameOver = false;
-    static int height = 35;
-    static int width = 60;
+    static int height = 30;
+    static int width = 50;
     static int cornersize = 20;
     static Position position;
     private int map = 2;
     private Way way;
     private BorderPane root;
+    private Timeline timer;
+
 
     public Map(){
         super();
-        Timeline timer = new Timeline(new KeyFrame(Duration.millis(50), new EventHandler<ActionEvent>() {
+        timer = new Timeline(new KeyFrame(Duration.millis(50), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 for(Ennemie b: listenemie){
@@ -85,10 +87,7 @@ public class Map extends Application implements Iterable<Ennemie> {
             }.start();
 
 
-            Scene scene = new Scene(root, width * cornersize, height * cornersize);
-            stage.setScene(scene);
-            stage.setTitle("Tower Defence Game");
-            stage.show();
+
             way = new Way();
             for (Line line : way.getWay(map)){
                 root.getChildren().add(line);
@@ -105,8 +104,10 @@ public class Map extends Application implements Iterable<Ennemie> {
             tower1.start(listenemie);
             root.getChildren().add(tower.getForme());
             root.getChildren().add(tower1.getForme());
-            root.setPrefSize(x, 650);
-
+            Scene scene = new Scene(root, width * cornersize, height * cornersize);
+            stage.setScene(scene);
+            stage.setTitle("Tower Defence Game");
+            stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,10 +123,10 @@ public class Map extends Application implements Iterable<Ennemie> {
     private void mouseClicked(MouseEvent mouseEvent) {
         int x = (int) mouseEvent.getX();
         int y = (int) mouseEvent.getY();
-        if (x < 510 && x > 420 && y < 40) {
+        if (x < 510 && x > 420 && y < 30) {
             start();
         }
-        if (x < 610 && x > 550 && y < 40) {
+        if (x < 610 && x > 550 && y < 30) {
             listdefence.add(new Tower(mouseClickedtower(mouseEvent)));
             root.getChildren().add(listdefence.get(listdefence.size()-1).getForme());
         }
