@@ -173,7 +173,7 @@ public class Map extends Application implements Iterable<Ennemie> {
             e.start(listenemie, way, map);
         }
     }
-    
+
     @Override
     public Iterator<Ennemie> iterator() {
         return listenemie.iterator();
