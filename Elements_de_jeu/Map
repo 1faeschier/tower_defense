@@ -138,7 +138,7 @@ public class Map extends Application implements Iterable<Ennemie> {
     }
 
     public static void tick(GraphicsContext gc){
-        if (gameOver) {
+       if (gameOver) {
             gc.setFill(Color.RED);
             gc.setFont(new Font("",50));
             gc.fillText("GAME OVER", 100,250);
@@ -156,15 +156,16 @@ public class Map extends Application implements Iterable<Ennemie> {
 
         gc.setFill(Color.WHITE);
         gc.fillText("Tour", 550, 40);
-        
+
         gc.setFill(Color.WHITE);
-        gc.fillText("Wave: 1", 950, 40);
-        
+        gc.fillText("Wave: 1", 20, 500);
+
         gc.setFill(Color.WHITE);
         gc.fillText("Pause", 950, 40);
 
-
     }
+    
+    
     public static void create(){
         launch();
     }
