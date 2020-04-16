@@ -41,7 +41,6 @@ public class Map extends Application implements Iterable<Ennemie> {
     private BorderPane root;
     private Timeline timer;
 
-
     public Map(){
         super();
         timer = new Timeline(new KeyFrame(Duration.millis(50), new EventHandler<ActionEvent>() {
@@ -100,8 +99,6 @@ public class Map extends Application implements Iterable<Ennemie> {
             Tower tower1 = new Tower(new Position(250, 150));
             listdefence.add(tower);
             listdefence.add(tower1);
-            tower.start(listenemie);
-            tower1.start(listenemie);
             root.getChildren().add(tower.getForme());
             root.getChildren().add(tower1.getForme());
             Scene scene = new Scene(root, width * cornersize, height * cornersize);
