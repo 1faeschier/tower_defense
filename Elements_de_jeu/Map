@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 public class Map extends Application implements Iterable<Ennemie> {
     private int x = 1000;
-    private int y = 100;
+    private int y = 110;
     ArrayList<Ennemie>listenemie = new ArrayList<>();
     ArrayList<Tower>listdefence = new ArrayList<>();
     Wave wave1 = new Wave();
@@ -36,10 +36,10 @@ public class Map extends Application implements Iterable<Ennemie> {
     static int width = 50;
     static int cornersize = 20;
     static Position position;
-    private int map = 2;
+    private Timeline timer;
+    private int map = 1;
     private Way way;
     private BorderPane root;
-    private Timeline timer;
 
     public Map(){
         super();
@@ -51,8 +51,8 @@ public class Map extends Application implements Iterable<Ennemie> {
                 }
                 for(Tower t : listdefence){
                     t.update();
+                    System.out.println(listdefence.indexOf(t));
                 }
-
             }
         }));
         timer.setCycleCount(Timeline.INDEFINITE);
@@ -66,7 +66,7 @@ public class Map extends Application implements Iterable<Ennemie> {
             Canvas c = makeCanvas();
             GraphicsContext gc = c.getGraphicsContext2D();
             StackPane canvasHolder = new StackPane(c);
-            BorderPane root = new BorderPane(canvasHolder);
+            root = new BorderPane(canvasHolder);
 
 
             new AnimationTimer() {
@@ -91,16 +91,16 @@ public class Map extends Application implements Iterable<Ennemie> {
             for (Line line : way.getWay(map)){
                 root.getChildren().add(line);
             }
-            listenemie = wave1.start(2);
+            listenemie = wave1.start(3);
             for (Ennemie e : listenemie){
                 root.getChildren().add(e.getForme());
             }
-            Tower tower = new Tower(new Position(500, 130));
-            Tower tower1 = new Tower(new Position(250, 150));
+            Tower tower = new Tower(new Position(500, 150));
+            Tower tower1 = new Tower(new Position(300, 350));
             listdefence.add(tower);
             listdefence.add(tower1);
             root.getChildren().add(tower.getForme());
-            root.getChildren().add(tower1.getForme());
+            root.getChildren().addAll(tower1.getForme());
             Scene scene = new Scene(root, width * cornersize, height * cornersize);
             stage.setScene(scene);
             stage.setTitle("Tower Defence Game");
@@ -128,7 +128,6 @@ public class Map extends Application implements Iterable<Ennemie> {
             root.getChildren().add(listdefence.get(listdefence.size()-1).getForme());
         }
     }
-    
     private Position mouseClickedtower(MouseEvent mouseEvent){
         int x = (int) mouseEvent.getX();
         int y = (int) mouseEvent.getY();
@@ -136,7 +135,7 @@ public class Map extends Application implements Iterable<Ennemie> {
     }
 
     public static void tick(GraphicsContext gc){
-       if (gameOver) {
+        if (gameOver) {
             gc.setFill(Color.RED);
             gc.setFont(new Font("",50));
             gc.fillText("GAME OVER", 100,250);
@@ -147,13 +146,13 @@ public class Map extends Application implements Iterable<Ennemie> {
 
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("",30));
-        gc.fillText("Score:" + score,20,40);
+        gc.fillText("Score:" + Player.score(score),10,30);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Start", 430, 40);
+        gc.fillText("start", 430, 30);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Tour", 550, 40);
+        gc.fillText("Tour", 550, 30 );
 
         gc.setFill(Color.WHITE);
         gc.fillText("Wave: 1", 20, 500);
@@ -162,12 +161,10 @@ public class Map extends Application implements Iterable<Ennemie> {
         gc.fillText("Pause", 950, 40);
 
     }
-    
-    
     public static void create(){
         launch();
     }
-    
+
     public void start(){
         for (Tower t : listdefence) {
             t.start(listenemie);
@@ -176,7 +173,7 @@ public class Map extends Application implements Iterable<Ennemie> {
             e.start(listenemie, way, map);
         }
     }
-
+    
     @Override
     public Iterator<Ennemie> iterator() {
         return listenemie.iterator();
