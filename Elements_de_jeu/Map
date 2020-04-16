@@ -122,10 +122,10 @@ public class Map extends Application implements Iterable<Ennemie> {
     private void mouseClicked(MouseEvent mouseEvent) {
         int x = (int) mouseEvent.getX();
         int y = (int) mouseEvent.getY();
-        if (x < 510 && x > 420 && y < 30) {
+        if (x < 510 && x > 420 && y < 40) {
             start();
         }
-        if (x < 610 && x > 550 && y < 30) {
+        if (x < 610 && x > 550 && y < 40) {
             listdefence.add(new Tower(mouseClickedtower(mouseEvent)));
             root.getChildren().add(listdefence.get(listdefence.size()-1).getForme());
         }
@@ -135,18 +135,6 @@ public class Map extends Application implements Iterable<Ennemie> {
         int x = (int) mouseEvent.getX();
         int y = (int) mouseEvent.getY();
         return new Position(x,y);
-    }
-
-    private HBox makeToolPanel(Canvas c){
-        Button pauseButton = new Button("pause");
-        Button tourButton = new Button("tour");
-        tourButton.setOnAction( (e) -> new Tower(position) );
-        HBox tools = new HBox(10);
-        tools.getChildren().add(pauseButton);
-        tools.getChildren().add(tourButton);
-
-        return tools;
-
     }
 
     public static void tick(GraphicsContext gc){
@@ -161,13 +149,19 @@ public class Map extends Application implements Iterable<Ennemie> {
 
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("",30));
-        gc.fillText("Score:" + Player.score(score),10,30);
+        gc.fillText("Score:" + score,20,40);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("start", 430, 30);
+        gc.fillText("Start", 430, 40);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Tour", 550, 30 );
+        gc.fillText("Tour", 550, 40);
+        
+        gc.setFill(Color.WHITE);
+        gc.fillText("Wave: 1", 950, 40);
+        
+        gc.setFill(Color.WHITE);
+        gc.fillText("Pause", 950, 40);
 
 
     }
