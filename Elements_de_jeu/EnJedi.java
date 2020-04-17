@@ -16,6 +16,7 @@ public class EnJedi extends Ennemie implements Runnable {
     private Way way;
     private int map;
     private Random random = new Random();
+    int play = 0;  //0 = mode play et 1 == pause
 
 
     public void looseHealth(int amount) {
@@ -71,106 +72,115 @@ public class EnJedi extends Ennemie implements Runnable {
     @Override
     public void run() {
         ArrayList<Line> waylist = way.getWay(map);
-        if (map == 1) {
-            while (position.isonWay(way, map) && position.getX() > waylist.get(0).getEndX() - 10) {
-                move(-1, 0);
-                try {
-                    Thread.sleep(speed);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            while (position.isonWay(way, map) && position.getY() < waylist.get(1).getEndY() - 10) {
-                move(0, 1);
-                try {
-                    Thread.sleep(speed);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        while (true) {
+            if (play == 0) {
+                if (map == 1) {
+                    while (position.isonWay(way, map) && position.getX() > waylist.get(0).getEndX() - 10 && play == 0) {
+                        move(-1, 0);
+                        try {
+                            Thread.sleep(speed);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    while (position.isonWay(way, map) && position.getY() < waylist.get(1).getEndY() - 10 && play == 0) {
+                        move(0, 1);
+                        try {
+                            Thread.sleep(speed);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    while ((position.isonWay(way, map) && position.getX() < waylist.get(2).getEndX()) && play == 0) {
+                        move(1, 0);
+                        try {
+                            Thread.sleep(speed);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
 
-            }
-            while ((position.isonWay(way, map) && position.getX() < waylist.get(2).getEndX())) {
-                move(1, 0);
-                try {
-                    Thread.sleep(speed);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        if (map == 2) {
-            if (random.nextBoolean()) {
-                while (position.isonWay(way, map) && position.getX() > 690) {
-                    move(-1, 0);
-                    try {
-                        Thread.sleep(speed);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                if (map == 2) {
+                    if (random.nextBoolean()) {
+                        while (position.isonWay(way, map) && position.getX() > 690 && play == 0) {
+                            move(-1, 0);
+                            try {
+                                Thread.sleep(speed);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        while (position.isonWay(way, map) && position.getY() < 300 && play == 0) {
+                            move(0, 1);
+                            try {
+                                Thread.sleep(speed);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        while (position.isonWay(way, map) && position.getX() > 290 && play == 0) {
+                            move(-1, 0);
+                            try {
+                                Thread.sleep(speed);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        while (position.isonWay(way, map) && position.getY() > 100 && play == 0) {
+                            move(0, -1);
+                            try {
+                                Thread.sleep(speed);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        while (position.isonWay(way, map) && position.getX() > 0 && play == 0) {
+                            move(-1, 0);
+                            try {
+                                Thread.sleep(speed);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (position.isonWay(way, map) && position.getX() < 20 && play == 0) {
+                            r.setWidth(0);
+                            r.setHeight(0);
+                            r.setStroke(Color.BROWN);
+                            Map.score -= 10;
+                        }
+                    } else {
+                        while (position.isonWay(way, map) && position.getX() > 0 && play == 0) {
+                            move(-1, 0);
+                            try {
+                                Thread.sleep(speed);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (health != 0) {
+                            if (position.isonWay(way, map) && position.getX() < 20 && play == 0) {
+                                r.setWidth(0);
+                                r.setHeight(0);
+                                r.setStroke(Color.BROWN);
+                                Map.score -= 10;
+                            }
+                        } else {
+                            if (position.isonWay(way, map) && position.getX() < 20 && play == 0) {
+                                Map.score += 0;
+                            }
+                        }
                     }
-                }
-                while (position.isonWay(way, map) && position.getY() < 300) {
-                    move(0, 1);
-                    try {
-                        Thread.sleep(speed);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                while (position.isonWay(way, map) && position.getX() > 290) {
-                    move(-1, 0);
-                    try {
-                        Thread.sleep(speed);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                while (position.isonWay(way, map) && position.getY() > 100) {
-                    move(0, -1);
-                    try {
-                        Thread.sleep(speed);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                while (position.isonWay(way, map) && position.getX() > 0) {
-                    move(-1, 0);
-                    try {
-                        Thread.sleep(speed);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (position.isonWay(way, map) && position.getX() < 20) {
-                    r.setWidth(0);
-                    r.setHeight(0);
-                    r.setStroke(Color.BROWN);
-                    Map.score -= 10;
                 }
             } else {
-                while (position.isonWay(way, map) && position.getX() > 0) {
-                    move(-1, 0);
-                    try {
-                        Thread.sleep(speed);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (health != 0) {
-                    if (position.isonWay(way, map) && position.getX() < 20) {
-                        r.setWidth(0);
-                        r.setHeight(0);
-                        r.setStroke(Color.BROWN);
-                        Map.score -= 10;
-                    }
-                } else {
-                    if (position.isonWay(way, map) && position.getX() < 20) {
-                        Map.score += 0;
-                    }
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }
-
     }
 
     public void start(ArrayList<Ennemie> list, Way way, int map) {
@@ -178,5 +188,10 @@ public class EnJedi extends Ennemie implements Runnable {
         this.way = way;
         t.start();
         this.map = map;
+    }
+
+    public void pause(){
+        if(play == 1){play = 0;}
+        else {play = 1;}
     }
 }
