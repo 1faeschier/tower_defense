@@ -27,6 +27,7 @@ public class Tower extends Entities implements Runnable {
     public Polygon triangle = new Polygon();
     private double angle;
     private Ennemie e = null;
+    private int play = 0;  //0 = mode play et 1 == pause
 
 
     public Tower(Position position){
@@ -42,7 +43,7 @@ public class Tower extends Entities implements Runnable {
         if (upgradeCost <= score){
             score -= upgradeCost;
             upgradeCost += 20;
-            attackDamage += 20;
+            attackDamage += 200;
             sellCost += 20;
             attackRange += 10;
             attackSpeed += 5;
@@ -72,29 +73,57 @@ public class Tower extends Entities implements Runnable {
 
     @Override
     public void run() {
-        for (Ennemie ennemie : listenemie) {
-            while (position.distance(ennemie.getPosition()) > attackRange){
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            while (ennemie.getHealth() > 0 && position.distance(ennemie.getPosition()) < attackRange) {
-                e = ennemie;
-                if (position.distance(ennemie.getPosition()) < attackRange) {
-                    try {
-                        ennemie.looseHealth(attackDamage);
-                        //System.out.println(ennemie.getHealth());
-                        Thread.sleep(attackSpeed);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+        while (true) {
+            for (Ennemie ennemie : listenemie) {
+                if (play == 0) {
+                    while (position.distance(ennemie.getPosition()) > attackRange) {
+                        if (play == 1){
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                        else{
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    while (ennemie.getHealth() > 0 && position.distance(ennemie.getPosition()) < attackRange) {
+                        e = ennemie;
+                        if (position.distance(ennemie.getPosition()) < attackRange) {
+                            if (play == 1){
+                                try {
+                                    Thread.sleep(50);
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                            else {
+                                try {
+                                    ennemie.looseHealth(attackDamage);
+                                    System.out.println(ennemie.getHealth());
+                                    Thread.sleep(attackSpeed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } else {
+                            try {
+                                Thread.sleep(attackSpeed);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 } else {
                     try {
-                        Thread.sleep(attackSpeed);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
                     }
                 }
             }
@@ -115,5 +144,11 @@ public class Tower extends Entities implements Runnable {
                 position.getX()-50*Math.sin(((30+angle)/180)*Math.PI), position.getY()+50*Math.cos(((30+angle)/180)*Math.PI),
                 position.getX()+50*Math.sin(((30-angle)/180)*Math.PI), position.getY()+50*Math.cos(((30-angle)/180)*Math.PI)
         );
+    }
+
+
+    public void pause(){
+        if(play == 1){play = 0;}
+        else {play = 1;}
     }
 }
