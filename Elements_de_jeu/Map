@@ -51,7 +51,6 @@ public class Map extends Application implements Iterable<Ennemie> {
                 }
                 for(Tower t : listdefence){
                     t.update();
-                    System.out.println(listdefence.indexOf(t));
                 }
             }
         }));
@@ -120,14 +119,17 @@ public class Map extends Application implements Iterable<Ennemie> {
     private void mouseClicked(MouseEvent mouseEvent) {
         int x = (int) mouseEvent.getX();
         int y = (int) mouseEvent.getY();
-        if (x < 510 && x > 420 && y < 30) {
+        if (x < 510 && x > 420 && y < 40) {
             start();
         }
-        if (x < 610 && x > 550 && y < 30) {
+        if (x < 610 && x > 550 && y < 40) {
             listdefence.add(new Tower(mouseClickedtower(mouseEvent)));
             root.getChildren().add(listdefence.get(listdefence.size()-1).getForme());
         }
-    }
+        if (x < 740 && x > 670 && y < 40) {
+            pause();
+        }
+        }
     private Position mouseClickedtower(MouseEvent mouseEvent){
         int x = (int) mouseEvent.getX();
         int y = (int) mouseEvent.getY();
@@ -149,16 +151,16 @@ public class Map extends Application implements Iterable<Ennemie> {
         gc.fillText("Score:" + Player.score(score),10,30);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("start", 430, 30);
+        gc.fillText("start", 430, 40);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Tour", 550, 30 );
+        gc.fillText("Tour", 550, 40 );
 
         gc.setFill(Color.WHITE);
         gc.fillText("Wave: 1", 20, 500);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Pause", 950, 40);
+        gc.fillText("Pause", 670, 40);
 
     }
     public static void create(){
@@ -177,5 +179,14 @@ public class Map extends Application implements Iterable<Ennemie> {
     @Override
     public Iterator<Ennemie> iterator() {
         return listenemie.iterator();
+    }
+
+    private void pause(){
+        for (Ennemie e : listenemie){
+            e.pause();
+        }
+        for (Tower t : listdefence){
+            t.pause();
+        }
     }
 }
