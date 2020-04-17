@@ -37,4 +37,5 @@ public class Ennemie extends Entities{
 
     public void start(ArrayList<Ennemie> listenemie, Way way, int map) {
     }
+    public void pause() {}
 }
