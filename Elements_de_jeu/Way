@@ -30,7 +30,7 @@ public class Way extends Map {
         l3.setStroke(Color.BROWN);
         l3.setStrokeWidth(20);
         way.add(l1); way.add(l2); way.add(l3);
-    return way;
+        return way;
     }
 
     private ArrayList<Line> addway2(){
@@ -43,7 +43,22 @@ public class Way extends Map {
         return way;
     }
 
-    
+    public static boolean atTheEnd1(Position position){
+        Boolean res = false;
+        if(position.getX() >= 950 && position.getY() == 560){
+            res = true;
+        }
+        return res;
+    }
+    public static boolean atTheEnd2(Position position){
+        Boolean res = false;
+        if(position.getX() >= 950 && position.getY() == 0){
+            res = true;
+        }
+        return res;
+    }
+
+
     public boolean isEinde(Position position){
         Boolean res = false;
         if (way1.get(way1.size() - 1).getEndX() == position.getX() && way1.get(way1.size() - 1).getEndY() == position.getY()){
