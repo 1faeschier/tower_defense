@@ -19,6 +19,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -26,7 +28,7 @@ public class Map extends Application implements Iterable<Ennemie> {
     private int x = 1000;
     private int y = 110;
     ArrayList<Ennemie>listenemie = new ArrayList<>();
-    ArrayList<Tower>listdefence = new ArrayList<>();
+    static ArrayList<Tower>listdefence = new ArrayList<>();
     Wave wave1 = new Wave();
     static int score = 10;
     static int count = 0;
@@ -39,7 +41,8 @@ public class Map extends Application implements Iterable<Ennemie> {
     private Timeline timer;
     private int map = 1;
     private Way way;
-    private BorderPane root;
+    public static BorderPane root;
+    static int HP = 3;
 
     public Map(){
         super();
@@ -112,29 +115,51 @@ public class Map extends Application implements Iterable<Ennemie> {
 
     public Canvas makeCanvas(){
         Canvas c = new Canvas(width * cornersize, height * cornersize);
-        c.setOnMouseClicked( this::mouseClicked );
+        c.setOnMousePressed( this::mouseClicked );
+        c.setOnMouseDragged(this::mouseClicked);
+      //  c.setOnMouseReleased(this::mouseClicked);
         return c;
     }
 
     private void mouseClicked(MouseEvent mouseEvent) {
         int x = (int) mouseEvent.getX();
         int y = (int) mouseEvent.getY();
+
         if (x < 510 && x > 420 && y < 40) {
             start();
         }
+
         if (x < 610 && x > 550 && y < 40) {
             listdefence.add(new Tower(mouseClickedtower(mouseEvent)));
-            root.getChildren().add(listdefence.get(listdefence.size()-1).getForme());
+            root.getChildren().add(listdefence.get(listdefence.size() - 1).getForme());
         }
+
+        if (mouseEvent.getEventType() == MouseEvent.MOUSE_DRAGGED){
+            listdefence.remove(new Tower(mouseClickedtower(mouseEvent)));
+            root.getChildren().remove(listdefence.get(listdefence.size() - 1).getForme());
+            Tower u = new Tower(mouseClickedtower(mouseEvent));
+            listdefence.add(u);
+            root.getChildren().add(listdefence.get(listdefence.size() - 1).getForme());
+            if(mouseEvent.getEventType() == MouseEvent.MOUSE_RELEASED && y > 40) {
+                listdefence.remove(u);
+                root.getChildren().remove(listdefence.get(listdefence.size() - 1).getForme());
+                Tower v = new Tower(mouseClickedtower(mouseEvent));
+                listdefence.add(v);
+                root.getChildren().add(listdefence.get(listdefence.size() - 1).getForme());
+                }
+            }
+
         if (x < 740 && x > 670 && y < 40) {
             pause();
         }
-        }
+    }
+
     private Position mouseClickedtower(MouseEvent mouseEvent){
         int x = (int) mouseEvent.getX();
         int y = (int) mouseEvent.getY();
         return new Position(x,y);
     }
+
 
     public static void tick(GraphicsContext gc){
         if (gameOver) {
@@ -148,7 +173,7 @@ public class Map extends Application implements Iterable<Ennemie> {
 
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("",30));
-        gc.fillText("Score:" + Player.score(score),10,30);
+        gc.fillText("Score:" + score,10,30);
 
         gc.setFill(Color.WHITE);
         gc.fillText("start", 430, 40);
@@ -162,6 +187,8 @@ public class Map extends Application implements Iterable<Ennemie> {
         gc.setFill(Color.WHITE);
         gc.fillText("Pause", 670, 40);
 
+        gc.setFill(Color.WHITE);
+        gc.fillText("HP: " + HP, 700, 500);
     }
     public static void create(){
         launch();
