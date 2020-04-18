@@ -59,7 +59,7 @@ public class EnJedi extends Ennemie implements Runnable {
     }
 
     public void move(double dx, double dy) {
-        position.setX(position.getX() + dx);
+        position.setX(position.getX(), position.getX() + dx);
         position.setY(position.getY() + dy);
     }
 
@@ -99,6 +99,12 @@ public class EnJedi extends Ennemie implements Runnable {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                    }
+                    if (Way.atTheEnd2(position)){
+                        r.setWidth(0);
+                        r.setHeight(0);
+                        r.setStroke(Color.BROWN);
+                        Map.HP -= 1;
                     }
                 }
 
@@ -144,11 +150,11 @@ public class EnJedi extends Ennemie implements Runnable {
                                 e.printStackTrace();
                             }
                         }
-                        if (position.isonWay(way, map) && position.getX() < 20 && play == 0) {
+                        if (Way.atTheEnd2(position)){
                             r.setWidth(0);
                             r.setHeight(0);
                             r.setStroke(Color.BROWN);
-                            Map.score -= 10;
+                            Map.HP -= 1;
                         }
                     } else {
                         while (position.isonWay(way, map) && position.getX() > 0 && play == 0) {
@@ -160,11 +166,12 @@ public class EnJedi extends Ennemie implements Runnable {
                             }
                         }
                         if (health != 0) {
-                            if (position.isonWay(way, map) && position.getX() < 20 && play == 0) {
+                            if (position.isonWay(way, map) && position.getX() >= 950 && position.getY() == 0 &&
+                                    play == 0) {
                                 r.setWidth(0);
                                 r.setHeight(0);
                                 r.setStroke(Color.BROWN);
-                                Map.score -= 10;
+                                Map.HP -= 1;
                             }
                         } else {
                             if (position.isonWay(way, map) && position.getX() < 20 && play == 0) {
