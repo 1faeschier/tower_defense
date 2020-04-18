@@ -129,6 +129,8 @@ public class Tower extends Entities implements Runnable {
             }
         }
     }
+
+
     public void start(ArrayList<Ennemie> list) {
         listenemie = list;
         t.start();
@@ -137,7 +139,7 @@ public class Tower extends Entities implements Runnable {
 
     public void update() {
         if (e != null){
-        angle = position.getAngle(e.getPosition());}
+            angle = position.getAngle(e.getPosition());}
 
         triangle.getPoints().setAll(
                 position.getX(), position.getY(),
