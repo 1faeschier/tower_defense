@@ -43,6 +43,7 @@ public class Map extends Application implements Iterable<Ennemie> {
     private Way way;
     public static BorderPane root;
     static int HP = 3;
+    Boolean posetour = false;
 
     public Map(){
         super();
@@ -93,17 +94,10 @@ public class Map extends Application implements Iterable<Ennemie> {
             for (Line line : way.getWay(map)){
                 root.getChildren().add(line);
             }
-            listenemie = wave1.start(3);
+            listenemie = wave1.start(7);
             for (Ennemie e : listenemie){
                 root.getChildren().add(e.getForme());
             }
-
-            Tower tower = new Tower(new Position(500, 150));
-            Tower tower1 = new Tower(new Position(300, 350));
-            listdefence.add(tower);
-            listdefence.add(tower1);
-            root.getChildren().add(tower.getForme());
-            root.getChildren().addAll(tower1.getForme());
             Scene scene = new Scene(root, width * cornersize, height * cornersize);
             stage.setScene(scene);
             stage.setTitle("Tower Defence Game");
@@ -118,7 +112,7 @@ public class Map extends Application implements Iterable<Ennemie> {
         Canvas c = new Canvas(width * cornersize, height * cornersize);
         c.setOnMousePressed( this::mouseClicked );
         c.setOnMouseDragged(this::mouseClicked);
-      //  c.setOnMouseReleased(this::mouseClicked);
+        //  c.setOnMouseReleased(this::mouseClicked);
         return c;
     }
 
@@ -130,29 +124,24 @@ public class Map extends Application implements Iterable<Ennemie> {
             start();
         }
 
-        if (x < 610 && x > 550 && y < 40) {
-            listdefence.add(new Tower(mouseClickedtower(mouseEvent)));
-            root.getChildren().add(listdefence.get(listdefence.size() - 1).getForme());
-        }
-
-        if (mouseEvent.getEventType() == MouseEvent.MOUSE_DRAGGED){
-            listdefence.remove(new Tower(mouseClickedtower(mouseEvent)));
-            root.getChildren().remove(listdefence.get(listdefence.size() - 1).getForme());
-            Tower u = new Tower(mouseClickedtower(mouseEvent));
-            listdefence.add(u);
-            root.getChildren().add(listdefence.get(listdefence.size() - 1).getForme());
-            if(mouseEvent.getEventType() == MouseEvent.MOUSE_RELEASED && y > 40) {
-                listdefence.remove(u);
-                root.getChildren().remove(listdefence.get(listdefence.size() - 1).getForme());
-                Tower v = new Tower(mouseClickedtower(mouseEvent));
-                listdefence.add(v);
-                root.getChildren().add(listdefence.get(listdefence.size() - 1).getForme());
-                }
-            }
-
         if (x < 740 && x > 670 && y < 40) {
             pause();
         }
+
+        if (x < 610 && x > 550 && y < 40) {
+            posetour = true;
+            System.out.println("okokokokok");
+        }
+        else {
+            if (posetour){
+                System.out.println("3");
+                Tower u = new Tower(mouseClickedtower(mouseEvent));
+                listdefence.add(u);
+                root.getChildren().add(listdefence.get(listdefence.size() - 1).getForme());
+                posetour = false;
+            }
+        }
+
     }
 
     private Position mouseClickedtower(MouseEvent mouseEvent){
@@ -161,12 +150,6 @@ public class Map extends Application implements Iterable<Ennemie> {
         return new Position(x,y);
     }
 
-
-    public void kill(Ennemie e){
-        if (e.getHealth() <= 0){
-            listenemie.remove(e);
-            root.getChildren().remove(listenemie.get(listenemie.size() - 1).getForme());        }
-    }
 
     public static void tick(GraphicsContext gc){
         if (gameOver) {
