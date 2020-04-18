@@ -16,11 +16,11 @@ public class Tower extends Entities implements Runnable {
     private int attackDamage = 24;
     private int attackSpeed = 400;
     private Thread t;
-    private int buildCost;
+    private int buildCost = 10;
     private int buildTime;
     private int speedRotation;
-    private int level;
-    private int upgradeCost;
+    private int level = 0;
+    private int upgradeCost = 10;
     private int upgradeTime;
     private int sellCost;
     public ArrayList<Ennemie> listenemie;
@@ -38,22 +38,23 @@ public class Tower extends Entities implements Runnable {
 
     public Position getPosition(){ return position; }
 
-    public String upgrade(int score){
-        String res = "";
-        if (upgradeCost <= score){
-            score -= upgradeCost;
-            upgradeCost += 20;
-            attackDamage += 200;
-            sellCost += 20;
-            attackRange += 10;
-            attackSpeed += 5;
-            upgradeTime += 50;
-            res = "amérlioration réalisée avec succès !";
+    public void upgrade(){
+        level++;
+        upgradeCost += 5;
+        attackDamage += 200;
+        sellCost += 20;
+        attackRange += 10;
+        attackSpeed += 5;
+        System.out.println("amélioration réalisée avec succès");
+        if (level == 1) {
+            triangle.setFill(Color.RED);
         }
-        else {
-            res =  "Tu n'as pas les fonds nécessaires, retourne shooter des méchants";
+        else if (level == 2){
+            triangle.setFill(Color.BLUE);
         }
-        return res;
+        else if (level == 3){
+            triangle.setFill(Color.YELLOW);
+        }
     }
 
     public Polygon getForme(){
@@ -67,6 +68,13 @@ public class Tower extends Entities implements Runnable {
         return triangle;
     }
 
+    public Boolean isonTower(Position pos){
+        boolean res = false;
+        if (position.distance(pos) < 30){
+            res = true;
+        }
+        return res;
+    }
 
     public void shoot(float x, float y){
     }
@@ -129,8 +137,6 @@ public class Tower extends Entities implements Runnable {
             }
         }
     }
-
-
     public void start(ArrayList<Ennemie> list) {
         listenemie = list;
         t.start();
@@ -153,4 +159,10 @@ public class Tower extends Entities implements Runnable {
         if(play == 1){play = 0;}
         else {play = 1;}
     }
+
+    public int getpriceupgrade() {
+        return upgradeCost;
+    }
+
+    public int getprice(){return buildCost;}
 }
