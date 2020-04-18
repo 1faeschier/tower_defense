@@ -97,6 +97,7 @@ public class Map extends Application implements Iterable<Ennemie> {
             for (Ennemie e : listenemie){
                 root.getChildren().add(e.getForme());
             }
+
             Tower tower = new Tower(new Position(500, 150));
             Tower tower1 = new Tower(new Position(300, 350));
             listdefence.add(tower);
@@ -160,6 +161,12 @@ public class Map extends Application implements Iterable<Ennemie> {
         return new Position(x,y);
     }
 
+
+    public void kill(Ennemie e){
+        if (e.getHealth() <= 0){
+            listenemie.remove(e);
+            root.getChildren().remove(listenemie.get(listenemie.size() - 1).getForme());        }
+    }
 
     public static void tick(GraphicsContext gc){
         if (gameOver) {
