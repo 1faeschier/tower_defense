@@ -30,7 +30,7 @@ public class Map extends Application implements Iterable<Ennemie> {
     ArrayList<Ennemie>listenemie = new ArrayList<>();
     static ArrayList<Tower>listdefence = new ArrayList<>();
     Wave wave1 = new Wave();
-    static int score = 10;
+    static int gold = 30;
     static int count = 0;
     static int speed = 5;
     static boolean gameOver = false;
@@ -43,7 +43,9 @@ public class Map extends Application implements Iterable<Ennemie> {
     private Way way;
     public static BorderPane root;
     static int HP = 3;
-    Boolean posetour = false;
+    boolean posetour = false;
+    boolean upgradetour = false;
+    private Tower tower;
 
     public Map(){
         super();
@@ -94,10 +96,13 @@ public class Map extends Application implements Iterable<Ennemie> {
             for (Line line : way.getWay(map)){
                 root.getChildren().add(line);
             }
-            listenemie = wave1.start(7);
+            listenemie = wave1.start(15);
             for (Ennemie e : listenemie){
                 root.getChildren().add(e.getForme());
             }
+            Tower tower = new Tower(new Position(500, 150));
+            listdefence.add(tower);
+            root.getChildren().add(tower.getForme());
             Scene scene = new Scene(root, width * cornersize, height * cornersize);
             stage.setScene(scene);
             stage.setTitle("Tower Defence Game");
@@ -124,21 +129,40 @@ public class Map extends Application implements Iterable<Ennemie> {
             start();
         }
 
-        if (x < 740 && x > 670 && y < 40) {
+        else if (x < 740 && x > 670 && y < 40) {
             pause();
         }
 
-        if (x < 610 && x > 550 && y < 40) {
+        else if (x < 610 && x > 550 && y < 40) {
             posetour = true;
-            System.out.println("okokokokok");
+        }
+
+        else if (x < 290 && x > 170 && upgradetour) {
+            if (gold > tower.getprice()){
+                tower.upgrade();
+                gold -= tower.getpriceupgrade();
+            }
+            upgradetour = false;
+
         }
         else {
-            if (posetour){
-                System.out.println("3");
-                Tower u = new Tower(mouseClickedtower(mouseEvent));
-                listdefence.add(u);
-                root.getChildren().add(listdefence.get(listdefence.size() - 1).getForme());
+            if (posetour) {
+                if (gold > tower.getprice()) {
+                    Tower u = new Tower(mouseClickedtower(mouseEvent));
+                    listdefence.add(u);
+                    root.getChildren().add(u.getForme());
+                    gold -= tower.getprice();
+                }
+                else{System.out.println("pas assez d'argent poto :(");}
                 posetour = false;
+            }
+
+            for (Tower t : listdefence) {
+                if (t.isonTower(new Position(x, y))) {
+                    upgradetour = true;
+                    System.out.println("ok");
+                    tower = t;
+                }
             }
         }
 
@@ -163,7 +187,7 @@ public class Map extends Application implements Iterable<Ennemie> {
 
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("",30));
-        gc.fillText("Score:" + score,10,30);
+        gc.fillText("gold:" + gold,10,30);
 
         gc.setFill(Color.WHITE);
         gc.fillText("start", 430, 40);
@@ -176,6 +200,9 @@ public class Map extends Application implements Iterable<Ennemie> {
 
         gc.setFill(Color.WHITE);
         gc.fillText("Pause", 670, 40);
+
+        gc.setFill(Color.WHITE);
+        gc.fillText("Upgrade", 170, 40);
 
         gc.setFill(Color.WHITE);
         gc.fillText("HP: " + HP, 700, 500);
