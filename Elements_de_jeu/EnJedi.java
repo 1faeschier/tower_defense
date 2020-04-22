@@ -8,7 +8,7 @@ import java.util.Random;
 import javafx.scene.shape.Line;
 
 
-public class EnJedi extends Ennemie implements Runnable {
+public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUneForme {
     private int health = 200; //vie
     private int speed = 15;//vitesse du perso = temps en miliseconde entre deux déplacement de 1 unité
     private Thread t;
@@ -18,7 +18,7 @@ public class EnJedi extends Ennemie implements Runnable {
     private Random random = new Random();
     int play = 0;  //0 = mode play et 1 == pause
 
-
+    @Override
     public void looseHealth(int amount) {
         health -= amount;
         if (health <= 0){
@@ -30,24 +30,27 @@ public class EnJedi extends Ennemie implements Runnable {
     }
 
 
-    public EnJedi(Position positioninit) {
+    public E_Jedi(Position positioninit) {
         super();
         position = positioninit;
         t = new Thread(this);
     }
+    @Override
     public int getHealth() {
         return health;
     }
 
+    @Override
     public Position getPosition() {
         return position;
     }
 
-    public EnJedi createnew() {
-        EnJedi b = new EnJedi(position);
+    public E_Jedi createnew() {
+        E_Jedi b = new E_Jedi(position);
         return b;
     }
 
+    @Override
     public Rectangle getforme() {
         r.setHeight(20);
         r.setWidth(20);
@@ -58,11 +61,14 @@ public class EnJedi extends Ennemie implements Runnable {
         return r;
     }
 
+
+    @Override
     public void move(double dx, double dy) {
         position.setX(position.getX() + dx);
         position.setY(position.getY() + dy);
     }
 
+    @Override
     public void update() {
         r.setX(position.getX());
         r.setY(position.getY());
