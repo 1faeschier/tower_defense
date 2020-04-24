@@ -6,18 +6,19 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.shape.Line;
+import javafx.scene.transform.Rotate;
 
 
 public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUneForme {
-    private int health = 200; //vie
-    private int speed = 15;//vitesse du perso = temps en miliseconde entre deux déplacement de 1 unité
+
+    private int health = 300; //vie
+    private int speed = 5;//vitesse du perso = temps en miliseconde entre deux déplacement de 1 unité
     private Thread t;
     private ArrayList<Ennemie> listenemie;
     private Way way;
     private int map;
-    private Random random = new Random();
     int play = 0;  //0 = mode play et 1 == pause
-
+    private Random random = new Random();
     @Override
     public void looseHealth(int amount) {
         health -= amount;
@@ -25,6 +26,7 @@ public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUn
             r.setWidth(0);
             r.setHeight(0);
             r.setStroke(Color.BROWN);
+            r.setFill(Color.BROWN);
             Map.gold += 10;
         }
     }
@@ -52,12 +54,6 @@ public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUn
 
     @Override
     public Rectangle getforme() {
-        r.setHeight(20);
-        r.setWidth(20);
-        r.setX(position.getX());
-        r.setY(position.getY());
-        r.setFill(Color.BLUE);
-        r.setStroke(Color.BLACK);
         return r;
     }
 
@@ -78,39 +74,19 @@ public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUn
     @Override
     public void run() {
         ArrayList<Line> waylist = way.getWay(map);
-        while (true) {
+        boolean cond = true;
+        while (cond) {
             if (play == 0) {
                 if (map == 1) {
-                    while (position.isonWay(way, map) && position.getX() > waylist.get(0).getEndX() - 10 && play == 0) {
-                        move(-1, 0);
-                        try {
-                            Thread.sleep(speed);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                    while (position.getY() < 200 && position.getX() > waylist.get(0).getEndX() - 5) {
+                        if (play == 1){
+                            try {
+                                Thread.sleep(speed);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                    while (position.isonWay(way, map) && position.getY() < waylist.get(1).getEndY() - 10 && play == 0) {
-                        move(0, 1);
-                        try {
-                            Thread.sleep(speed);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                    while ((position.isonWay(way, map) && position.getX() < waylist.get(2).getEndX()) && play == 0) {
-                        move(1, 0);
-                        try {
-                            Thread.sleep(speed);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                if (map == 2) {
-                    if (random.nextBoolean()) {
-                        while (position.isonWay(way, map) && position.getX() > 690 && play == 0) {
+                        else {
                             move(-1, 0);
                             try {
                                 Thread.sleep(speed);
@@ -118,7 +94,17 @@ public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUn
                                 e.printStackTrace();
                             }
                         }
-                        while (position.isonWay(way, map) && position.getY() < 300 && play == 0) {
+                    }
+                    rotate(1);
+                    while (position.getY() < waylist.get(1).getEndY() - 5) {
+                        if (play == 1){
+                            try {
+                                Thread.sleep(speed);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
                             move(0, 1);
                             try {
                                 Thread.sleep(speed);
@@ -126,58 +112,144 @@ public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUn
                                 e.printStackTrace();
                             }
                         }
-                        while (position.isonWay(way, map) && position.getX() > 290 && play == 0) {
-                            move(-1, 0);
+
+                    }
+                    rotate(2);
+                    while ((position.getX() < waylist.get(2).getEndX() + 20)) {
+                        if (play == 1){
                             try {
                                 Thread.sleep(speed);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
-                        while (position.isonWay(way, map) && position.getY() > 100 && play == 0) {
-                            move(0, -1);
+                        else {
+                            move(1, 0);
                             try {
                                 Thread.sleep(speed);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
-                        while (position.isonWay(way, map) && position.getX() > 0 && play == 0) {
-                            move(-1, 0);
-                            try {
-                                Thread.sleep(speed);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+
+                    }
+                    if(health > 0){Map.PV -= 1;}
+                    cond = false;
+                }
+
+                if (map == 2) {
+                    if (random.nextBoolean()) {
+                        while (position.getX() > 695) {
+                            if (play == 1){
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else {
+                                move(-1, 0);
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
-                        if (position.isonWay(way, map) && position.getX() < 20 && play == 0) {
-                            r.setWidth(0);
-                            r.setHeight(0);
-                            r.setStroke(Color.BROWN);
-                            Map.gold -= 10;
+                        rotate(1);
+                        while (position.getY() < 305) {
+                            if (play == 1){
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else {
+                                move(0, 1);
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
+                        rotate(2);
+                        while (position.getX() > 295) {
+                            if (play == 1){
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else {
+                                move(-1, 0);
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        rotate(1);
+                        while (position.getY() > 105) {
+                            if (play == 1){
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else {
+                                move(0, -1);
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        rotate(2);
+                        while (position.getX() > -40) {
+                            if (play == 1){
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else {
+                                move(-1, 0);
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
                     } else {
-                        while (position.isonWay(way, map) && position.getX() > 0 && play == 0) {
-                            move(-1, 0);
-                            try {
-                                Thread.sleep(speed);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                        while (position.getX() > -40) {
+                            if (play == 1){
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }
-                        if (health != 0) {
-                            if (position.isonWay(way, map) && position.getX() < 20 && play == 0) {
-                                r.setWidth(0);
-                                r.setHeight(0);
-                                r.setStroke(Color.BROWN);
-                                Map.gold -= 10;
-                            }
-                        } else {
-                            if (position.isonWay(way, map) && position.getX() < 20 && play == 0) {
-                                Map.gold += 0;
+                            else {
+                                move(-1, 0);
+                                try {
+                                    Thread.sleep(speed);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
+                    if(health > 0){Map.PV -= 1;}
+                    cond = false;
                 }
             } else {
                 try {
@@ -187,7 +259,21 @@ public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUn
                 }
             }
         }
+        Map.conteur++;
+        if (Map.conteur == Map.wavelevel){Map.waveIsFinished = true; System.out.println("vague n° : " + Map.wavelevel + " terminer");}
     }
+
+    private void rotate(int i) {
+        if (i == 1) {
+            r.setHeight(40);
+            r.setWidth(10);
+        }
+        else{
+            r.setHeight(10);
+            r.setWidth(40);
+        }
+
+       }
 
     public void start(ArrayList<Ennemie> list, Way way, int map) {
         listenemie = list;
@@ -200,4 +286,15 @@ public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUn
         if(play == 1){play = 0;}
         else {play = 1;}
     }
+
+    public void degel() {
+        speed /= 2;
+        r.setFill(Color.RED);
+    }
+
+    public void gel() {
+        speed *= 2;
+        r.setFill(Color.LIGHTBLUE);
+    }
+
 }
