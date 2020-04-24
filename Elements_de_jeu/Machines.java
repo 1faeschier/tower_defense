@@ -35,7 +35,7 @@ public class Machines extends Ennemie implements Runnable, aUneForme, aUneVie, s
         r.setWidth(40);
         r.setX(position.getX());
         r.setY(position.getY());
-        r.setFill(Color.RED);
+        r.setFill(Color.BLUE);
         r.setStroke(Color.BLACK);
         return r;
     }
@@ -87,10 +87,11 @@ public class Machines extends Ennemie implements Runnable, aUneForme, aUneVie, s
     @Override
     public void run() {
         ArrayList<Line> waylist = way.getWay(map);
-        while (true) {
+        boolean cond = true;
+        while (cond) {
             if (play == 0) {
                 if (map == 1) {
-                    while (position.isonWay(way, map) && position.getX() > waylist.get(0).getEndX() - 10 && play == 0) {
+                    while (position.getY() < 200 && position.getX() > waylist.get(0).getEndX() - 5 && play == 0) {
                         move(-1, 0);
                         try {
                             Thread.sleep(speed);
@@ -98,7 +99,8 @@ public class Machines extends Ennemie implements Runnable, aUneForme, aUneVie, s
                             e.printStackTrace();
                         }
                     }
-                    while (position.isonWay(way, map) && position.getY() < waylist.get(1).getEndY() - 10 && play == 0) {
+                    rotate(1);
+                    while (position.getY() < waylist.get(1).getEndY() - 5 && play == 0) {
                         move(0, 1);
                         try {
                             Thread.sleep(speed);
@@ -107,7 +109,8 @@ public class Machines extends Ennemie implements Runnable, aUneForme, aUneVie, s
                         }
 
                     }
-                    while ((position.isonWay(way, map) && position.getX() < waylist.get(2).getEndX()) && play == 0) {
+                    rotate(2);
+                    while ((position.getX() < waylist.get(2).getEndX() + 20) && play == 0) {
                         move(1, 0);
                         try {
                             Thread.sleep(speed);
@@ -115,17 +118,13 @@ public class Machines extends Ennemie implements Runnable, aUneForme, aUneVie, s
                             e.printStackTrace();
                         }
                     }
-                    if (Way.atTheEnd2(position)){
-                        r.setWidth(0);
-                        r.setHeight(0);
-                        r.setStroke(Color.BROWN);
-                        Map.HP -= 1;
-                    }
+                    if(health > 0){Map.PV -= 1;}
+                    cond = false;
                 }
 
                 if (map == 2) {
                     if (random.nextBoolean()) {
-                        while (position.isonWay(way, map) && position.getX() > 690 && play == 0) {
+                        while (position.getX() > 695 && play == 0) {
                             move(-1, 0);
                             try {
                                 Thread.sleep(speed);
@@ -133,7 +132,8 @@ public class Machines extends Ennemie implements Runnable, aUneForme, aUneVie, s
                                 e.printStackTrace();
                             }
                         }
-                        while (position.isonWay(way, map) && position.getY() < 300 && play == 0) {
+                        rotate(1);
+                        while (position.getY() < 305 && play == 0) {
                             move(0, 1);
                             try {
                                 Thread.sleep(speed);
@@ -141,7 +141,8 @@ public class Machines extends Ennemie implements Runnable, aUneForme, aUneVie, s
                                 e.printStackTrace();
                             }
                         }
-                        while (position.isonWay(way, map) && position.getX() > 290 && play == 0) {
+                        rotate(2);
+                        while (position.getX() > 295 && play == 0) {
                             move(-1, 0);
                             try {
                                 Thread.sleep(speed);
@@ -149,7 +150,8 @@ public class Machines extends Ennemie implements Runnable, aUneForme, aUneVie, s
                                 e.printStackTrace();
                             }
                         }
-                        while (position.isonWay(way, map) && position.getY() > 100 && play == 0) {
+                        rotate(1);
+                        while (position.getY() > 105 && play == 0) {
                             move(0, -1);
                             try {
                                 Thread.sleep(speed);
@@ -157,7 +159,8 @@ public class Machines extends Ennemie implements Runnable, aUneForme, aUneVie, s
                                 e.printStackTrace();
                             }
                         }
-                        while (position.isonWay(way, map) && position.getX() > 0 && play == 0) {
+                        rotate(2);
+                        while (position.getX() > -40 && play == 0) {
                             move(-1, 0);
                             try {
                                 Thread.sleep(speed);
@@ -165,35 +168,19 @@ public class Machines extends Ennemie implements Runnable, aUneForme, aUneVie, s
                                 e.printStackTrace();
                             }
                         }
-                        if (Way.atTheEnd2(position)){
-                            r.setWidth(0);
-                            r.setHeight(0);
-                            r.setStroke(Color.BROWN);
-                            Map.HP -= 1;
-                        }
+
                     } else {
-                        while (position.isonWay(way, map) && position.getX() > 0 && play == 0) {
+                        while (position.getX() > -40 && play == 0) {
                             move(-1, 0);
                             try {
                                 Thread.sleep(speed);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
-                            }
-                        }
-                        if (health != 0) {
-                            if (position.isonWay(way, map) && position.getX() >= 950 && position.getY() == 0 &&
-                                    play == 0) {
-                                r.setWidth(0);
-                                r.setHeight(0);
-                                r.setStroke(Color.BROWN);
-                                Map.HP -= 1;
-                            }
-                        } else {
-                            if (position.isonWay(way, map) && position.getX() < 20 && play == 0) {
-                                Map.gold += 0;
                             }
                         }
                     }
+                    if(health > 0){Map.PV -= 1;}
+                    cond = false;
                 }
             } else {
                 try {
@@ -203,6 +190,20 @@ public class Machines extends Ennemie implements Runnable, aUneForme, aUneVie, s
                 }
             }
         }
+        Map.conteur++;
+        if (Map.conteur == Map.wavelevel){Map.waveIsFinished = true; System.out.println("vague n° : " + Map.wavelevel + " terminer");}
+    }
+
+    private void rotate(int i) {
+        if (i == 1) {
+            r.setHeight(40);
+            r.setWidth(10);
+        }
+        else{
+            r.setHeight(10);
+            r.setWidth(40);
+        }
+
     }
 
     public void start(ArrayList<Ennemie> list, Way way, int map) {
