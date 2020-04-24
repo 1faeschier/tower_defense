@@ -23,18 +23,19 @@ import javafx.util.Duration;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class Map extends Application implements Iterable<Ennemie> {
     private int x = 1000;
     private int y = 110;
-    ArrayList<Ennemie>listenemie = new ArrayList<>();
-    static ArrayList<Tower>listdefence = new ArrayList<>();
+    static ArrayList<Ennemie>listenemie = new ArrayList<>();
+    static ArrayList<Defence>listdefence = new ArrayList<>();
     Wave wave1 = new Wave();
     static int gold = 30;
     static int count = 0;
     static int speed = 5;
     static boolean gameOver = false;
-    static int height = 30;
+    static int height = 34;
     static int width = 50;
     static int cornersize = 20;
     static Position position;
@@ -42,10 +43,16 @@ public class Map extends Application implements Iterable<Ennemie> {
     private int map = 1;
     private Way way;
     public static BorderPane root;
-    static int HP = 3;
-    boolean posetour = false;
+    boolean posetoursimple = false;
+    boolean posetourgele = false;
     boolean upgradetour = false;
-    private Tower tower;
+    private Defence tower;
+    private int difficulte;
+    static int PV = 10;
+    static int wavelevel = 1;
+    static boolean waveIsFinished = false;
+    static int conteur = 0;
+    static int play = 0;
 
     public Map(){
         super();
@@ -55,8 +62,8 @@ public class Map extends Application implements Iterable<Ennemie> {
                 for(Ennemie b: listenemie){
                     b.update();
                 }
-                for(Tower t : listdefence){
-                    t.update();
+                for(Defence t : listdefence){
+                    t.update(listenemie);
                 }
             }
         }));
@@ -91,16 +98,16 @@ public class Map extends Application implements Iterable<Ennemie> {
             }.start();
 
 
-
+            menuStart();
             way = new Way();
             for (Line line : way.getWay(map)){
                 root.getChildren().add(line);
             }
-            listenemie = wave1.start(15);
+            listenemie = wave1.start(1);
             for (Ennemie e : listenemie){
                 root.getChildren().add(e.getForme());
             }
-            Tower tower = new Tower(new Position(500, 150));
+            Tower tower = new Tower(new Position(500, 150), listenemie);
             listdefence.add(tower);
             root.getChildren().add(tower.getForme());
             Scene scene = new Scene(root, width * cornersize, height * cornersize);
@@ -129,16 +136,39 @@ public class Map extends Application implements Iterable<Ennemie> {
             start();
         }
 
-        else if (x < 740 && x > 670 && y < 40) {
+        else if (x < 740 && x > 670 && y > 610) {
             pause();
         }
 
-        else if (x < 610 && x > 550 && y < 40) {
-            posetour = true;
+        else if(x < 970 && x > 790 && y < 460 && y > 400) {
+            if (waveIsFinished){
+                Wave wave = new Wave();
+                wavelevel++;
+                listenemie = wave.start(difficulte*wavelevel);
+                for (Ennemie e : listenemie) {
+                    root.getChildren().add(e.getForme());
+                    e.start(listenemie, way, map);
+                }
+                conteur = 0;
+                waveIsFinished = false;
+                for (Defence t : listdefence){
+                    t.setlist(listenemie);
+                }
+            }
+            else {System.out.println("vague pas encore terminée");}
         }
 
-        else if (x < 290 && x > 170 && upgradetour) {
-            if (gold > tower.getprice()){
+
+        else if (x < 420 && x > 310 && y > 570) {
+            posetoursimple = true;
+        }
+
+        else if (x < 720 && x > 610 && y > 570) {
+            posetourgele = true;
+        }
+
+        else if (x < 130 && x > 10 && upgradetour) {
+            if (gold > tower.getpriceupgrade()){
                 tower.upgrade();
                 gold -= tower.getpriceupgrade();
             }
@@ -146,18 +176,27 @@ public class Map extends Application implements Iterable<Ennemie> {
 
         }
         else {
-            if (posetour) {
-                if (gold > tower.getprice()) {
-                    Tower u = new Tower(mouseClickedtower(mouseEvent));
+            if (posetoursimple) {
+                if (gold >= 10) {
+                    Tower u = new Tower(mouseClickedtower(mouseEvent), listenemie);
                     listdefence.add(u);
                     root.getChildren().add(u.getForme());
-                    gold -= tower.getprice();
+                    gold -= 10;
                 }
-                else{System.out.println("pas assez d'argent poto :(");}
-                posetour = false;
+                else{System.out.println("pas assez d'argent poto :( ");}
+                posetoursimple = false;
             }
-
-            for (Tower t : listdefence) {
+            else if (posetourgele) {
+                if (gold >= 15) {
+                    TowerGele u = new TowerGele(mouseClickedtower(mouseEvent));
+                    listdefence.add(u);
+                    root.getChildren().add(u.getForme());
+                    gold -= 15;
+                }
+                else{System.out.println("pas assez d'argent poto :( ");}
+                posetourgele = false;
+            }
+            for (Defence t : listdefence) {
                 if (t.isonTower(new Position(x, y))) {
                     upgradetour = true;
                     System.out.println("ok");
@@ -187,32 +226,46 @@ public class Map extends Application implements Iterable<Ennemie> {
 
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("",30));
-        gc.fillText("gold:" + gold,10,30);
+        gc.fillText("gold:" + gold,10,40);
 
         gc.setFill(Color.WHITE);
         gc.fillText("start", 430, 40);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Tour", 550, 40 );
+        gc.fillText("Tour Simple", 310, 620 );
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Wave: 1", 20, 500);
+        gc.fillText("Tour Gele", 610, 620 );
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Pause", 670, 40);
+        gc.fillText("Wave: " + wavelevel, 790, 500);
+
+        if (play == 0) {
+            gc.setFill(Color.WHITE);
+            gc.fillText("Pause", 670, 40);
+        }
+        else{
+            gc.setFill(Color.WHITE);
+            gc.fillText("Play", 670, 40);
+        }
 
         gc.setFill(Color.WHITE);
-        gc.fillText("Upgrade", 170, 40);
+        gc.fillText("Next Wave", 790, 450);
 
         gc.setFill(Color.WHITE);
-        gc.fillText("HP: " + HP, 700, 500);
+        gc.fillText("Upgrade", 10, 620);
+
+        gc.setFill(Color.WHITE);
+        gc.fillText("PV : " + PV, 310, 40);
+
     }
+
     public static void create(){
         launch();
     }
 
     public void start(){
-        for (Tower t : listdefence) {
+        for (Defence t : listdefence) {
             t.start(listenemie);
         }
         for (Ennemie e : listenemie){
@@ -229,8 +282,24 @@ public class Map extends Application implements Iterable<Ennemie> {
         for (Ennemie e : listenemie){
             e.pause();
         }
-        for (Tower t : listdefence){
+        for (Defence t : listdefence){
             t.pause();
         }
+        if(play == 1){play = 0;}
+        else {play = 1;}
+    }
+
+    private void menuStart() {
+        System.out.println("Bonjour, l'équipe AN vous souhaite une excellent partie ");
+        Scanner in1 = new Scanner(System.in);
+        System.out.print("Choisir une carte (1 ou 2) ");
+        //String mapstring = in1.nextLine(); map = Integer.parseInt(mapstring);
+        map = 1;
+        Scanner in2 = new Scanner(System.in);
+        System.out.print("choisir une difficulté (1-10) ");
+        //String difficulteStr = in2.nextLine(); difficulte = Integer.parseInt(difficulteStr);
+        difficulte = 2;
+        PV = 10;
+        way = new Way();
     }
 }
