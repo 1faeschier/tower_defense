@@ -9,6 +9,17 @@ import javafx.scene.shape.Line;
 
 
 public class M_Speeder extends Ennemie implements Runnable {
+    package sample;
+
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import java.util.ArrayList;
+import java.util.Random;
+
+import javafx.scene.shape.Line;
+
+
+public class EnSpeeder extends Ennemie implements Runnable {
     private int health = 100; //vie
     private int speed = 8;//vitesse du perso = temps en miliseconde entre deux déplacement de 1 unité
     private Thread t;
@@ -40,7 +51,7 @@ public class M_Speeder extends Ennemie implements Runnable {
     }
 
 
-    public M_Speeder(Position positioninit) {
+    public EnSpeeder(Position positioninit) {
         super();
         position = positioninit;
         t = new Thread(this);
