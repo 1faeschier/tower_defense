@@ -2,6 +2,6 @@ package sample;
 
 import java.util.ArrayList;
 
-public interface UpdatingK { //pour les tours qui tuent
+public interface UpdatingK { 
     void update(ArrayList<Ennemie> list);
 }
