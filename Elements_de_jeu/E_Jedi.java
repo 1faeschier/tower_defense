@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.shape.Line;
-import javafx.scene.transform.Rotate;
 
 
-public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUneForme {
-
+public class E_Jedi extends Ennemie implements Runnable, SeDeplace, AUneVie, AUneFormeR {
     private int health = 300; //vie
     private int speed = 5;//vitesse du perso = temps en miliseconde entre deux déplacement de 1 unité
     private Thread t;
@@ -19,6 +17,8 @@ public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUn
     private int map;
     int play = 0;  //0 = mode play et 1 == pause
     private Random random = new Random();
+
+
     @Override
     public void looseHealth(int amount) {
         health -= amount;
@@ -263,7 +263,8 @@ public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUn
         if (Map.conteur == Map.wavelevel){Map.waveIsFinished = true; System.out.println("vague n° : " + Map.wavelevel + " terminer");}
     }
 
-    private void rotate(int i) {
+    @Override
+    public void rotate(int i) {
         if (i == 1) {
             r.setHeight(40);
             r.setWidth(10);
@@ -272,8 +273,7 @@ public class E_Jedi extends Ennemie implements Runnable, seDeplace, aUneVie, aUn
             r.setHeight(10);
             r.setWidth(40);
         }
-
-       }
+    }
 
     public void start(ArrayList<Ennemie> list, Way way, int map) {
         listenemie = list;
