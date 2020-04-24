@@ -8,7 +8,7 @@ public class Ennemie extends Entities{
     private int id; //=matricule
     private int power; //résistance aux tirs
     private String description; //pour le différencier à l'écran
-    private int speed;//vitesse du perso
+    private int speed = 10;//vitesse du perso
     public Position position;
     public int health;
     public Rectangle r = new Rectangle();
@@ -26,13 +26,6 @@ public class Ennemie extends Entities{
     }
 
     public void looseHealth(int amount) {
-        health -= amount;
-        if (health <= 0){
-            r.setWidth(0);
-            r.setHeight(0);
-            r.setStroke(Color.BROWN);
-            Map.score += 10;
-        }
     }
 
     public Rectangle getForme() {
@@ -47,5 +40,12 @@ public class Ennemie extends Entities{
 
     public void start(ArrayList<Ennemie> listenemie, Way way, int map) {
     }
-    public void pause() {}
+    public void pause() {
+    }
+
+    public void gel() {
+    }
+
+    public void degel() {
+    }
 }
